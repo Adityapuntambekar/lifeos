@@ -1,5 +1,15 @@
 # LifeOS
 
+## Installable app and offline use
+
+On Windows, stop the existing LifeOS terminal (Ctrl+C), then double-click **Start Installed LifeOS.bat**. It builds the production app and serves it at **http://localhost:5173**. Open that address in Chrome or Edge, then **Settings → Install LifeOS** when offered (or the browser's Install app menu). The first visit needs the server running; wait until Settings reports that the offline files are saved. Installation is browser-dependent, requires localhost or HTTPS, and was not manually verified on a real device in this update.
+
+Personal trackers and local companion commands can then reopen offline from that same address/profile. Study Garden still needs its server, Google maps need the internet, and AI needs the configured local model. The app does not provide background scheduled reminders. Use Settings to check for and apply app updates. The normal `Start LifeOS.bat` remains the development launcher and disables its own production service worker when loaded.
+
+Calendar → Backup exports supported personal data and theme, excluding AI configuration and temporary companion context. Restore accepts older compatible backups, validates sections, previews replacements, and requires confirmation. Download current data before restoring. Unlisted sections are retained. Different browser profiles, hostnames and ports have separate storage; export before switching. Automated checks: `npm run build`, `node tests/backup.mjs`, `node tests/pwa.mjs`, `npm run test:space`.
+
+Abroad now supports worldwide country, city and campus exploration with embedded Google Maps and Google Earth links. Saved universities remain editable and deletable; no country restriction applies. Full Earth 3D opens separately. Existing personal data is preserved, and new university collections start empty. Internet access is required for maps.
+
 LifeOS is a calm, local-first personal command center for studies, career growth, research, and a Sweden/Denmark master’s plan.
 
 For another developer or model taking over, start with [`HANDOFF.md`](./HANDOFF.md).

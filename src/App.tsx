@@ -11,6 +11,7 @@ import Abroad from './Abroad'
 import Calendar from './Calendar'
 import Space from './Space'
 import Companions from './Companions'
+import AppSettings from './AppSettings'
 
 type Page = 'Space' | 'Home' | 'Academics' | 'Skills' | 'Abroad' | 'Calendar' | 'Companions'
 const pages: { label: Page; icon: typeof LayoutDashboard }[] = [
@@ -42,9 +43,11 @@ const friendlyCountdown = (date: string) => {
 export default function App() {
   const [page, setPage] = useState<Page>(()=>new URLSearchParams(location.search).has('room')?'Space':'Home')
   const [tasks, setTasks] = useSavedTasks()
+  const [settingsOpen,setSettingsOpen]=useState(false)
   const [sidebar, setSidebar] = useState(true)
   const [palette, setPalette] = useState(false)
-  const [theme, setTheme] = useState('nordic')
+  const [theme, setTheme] = useState(()=>{try{const saved=JSON.parse(localStorage.getItem('lifeos.theme')||'"nordic"');return ['nordic','lavender','matcha','sakura','midnight'].includes(saved)?saved:'nordic'}catch{return 'nordic'}})
+  useEffect(()=>localStorage.setItem('lifeos.theme',JSON.stringify(theme)),[theme])
   const [addOpen, setAddOpen] = useState(false)
   const [newTask, setNewTask] = useState('')
   const complete = tasks.filter(t => t.done).length
@@ -62,7 +65,7 @@ export default function App() {
       <div className="brand"><div className="brand-mark"><Sparkles size={18}/></div>{sidebar && <span>LifeOS</span>}<button className="icon-btn collapse" onClick={() => setSidebar(!sidebar)} aria-label="Collapse sidebar"><ChevronLeft size={17}/></button></div>
       <nav>{pages.map(({ label, icon: Icon }) => <button key={label} className={`nav-item ${page === label ? 'active' : ''}`} onClick={() => setPage(label)}><Icon size={18}/>{sidebar && <span>{label}</span>}{label === 'Companions' && sidebar && <span className="dot"/>}</button>)}</nav>
       {sidebar && <><p className="nav-heading">WORKSPACES</p><button className="tree-item"><BookOpen size={16}/> College tracker <MoreHorizontal size={15}/></button><button className="tree-item"><FileText size={16}/> Paper library</button><button className="tree-item"><Target size={16}/> 2028 applications</button></>}
-      <div className="sidebar-bottom"><button className="nav-item"><Settings size={18}/>{sidebar && <span>Settings</span>}</button><div className="profile"><div className="avatar">AP</div>{sidebar && <div><b>Aditya</b><small>Nordic Frost</small></div>}<ChevronDown size={15}/></div></div>
+      <div className="sidebar-bottom"><button className="nav-item" onClick={()=>setSettingsOpen(true)}><Settings size={18}/>{sidebar && <span>Settings</span>}</button><div className="profile"><div className="avatar">AP</div>{sidebar && <div><b>Aditya</b><small>Nordic Frost</small></div>}<ChevronDown size={15}/></div></div>
     </aside>
 
     <main>
@@ -71,6 +74,7 @@ export default function App() {
       <Space active={page === 'Space'} onReturn={()=>setPage('Space')}/>
       <Companions navigate={setPage} pageActive={page === 'Companions'} currentPage={page}/>
     </main>
+    {settingsOpen&&<AppSettings close={()=>setSettingsOpen(false)}/>}
     {palette && <CommandPalette close={() => setPalette(false)} go={p => { setPage(p); setPalette(false) }} />}
     {addOpen && <TaskModal value={newTask} setValue={setNewTask} save={submitTask} close={() => setAddOpen(false)} />}
     <div className="theme-picker"><span>Theme</span>{['nordic', 'lavender', 'matcha', 'sakura', 'midnight'].map(t => <button key={t} title={t} onClick={() => setTheme(t)} className={theme === t ? 'selected' : ''}/>)}</div>

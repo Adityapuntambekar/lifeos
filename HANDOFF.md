@@ -1,5 +1,20 @@
 # LifeOS — continuation handoff
 
+## Latest phase: installable offline app and safer restoration
+
+- `scripts/build-pwa.mjs` runs after Vite, generates 192/512 PNG icons and a content-versioned service worker precaching the build. Manifest is in `public/manifest.webmanifest`. Navigation is network-first with offline shell fallback; immutable build files are cache-first. External maps and `/space` are excluded. Activation of a waiting update requires the Settings action. Only LifeOS cache names are cleaned.
+- `src/pwa.ts` registers only production builds; development unregisters this origin's `/sw.js`. `AppSettings.tsx` opens via the formerly inert sidebar Settings button and shows install guidance, connectivity/cache status, update controls and data portability instructions. Actual browser install/offline reload has not been manually tested; simulated worker lifecycle and production hosting checks pass.
+- `Start Installed LifeOS.bat` builds and serves on localhost:5173 to match the usual development origin. Stop other servers on that port first. User data is origin-specific; never assume another port/profile shares it.
+- `backup.ts` validates supported section shapes, accepts legacy plain JSON or versioned envelopes, excludes AI configuration/temporary keys, preserves the raw Skills tab storage encoding, and rolls back failed writes. `RestorePreview.tsx` offers a review, a current-data download, explicit confirmation and section-wise replacement. Existing unlisted sections remain. Backups contain personal data; no cloud upload occurs.
+- Theme persists. Calendar now guards unsupported Notification API, avoids in-place state sorting, and truthfully labels permission without claiming reminder scheduling.
+- Checks passed: build, `tests/backup.mjs`, `tests/pwa.mjs`, companion-workspace regression, multiplayer and development/production hosting tests. Next suggested phase: real-device install/offline/accessibility QA, then durable accounts/rooms and collaboration hosting. No cloud backend, login, video/screensharing or background notifications were added.
+
+## Latest update: worldwide Abroad exploration and companion polish
+
+The user explicitly replaced the earlier Sweden/Denmark-only requirement with worldwide exploration. Preserve saved user records; new users start with an empty university collection and zero readiness/budget estimates. `WorldExplorer.tsx` provides country chips plus arbitrary country/city/campus search, embedded Google Maps, and external Google Earth / university-search links. Each saved university has a campus map and external Earth/Maps links; full Earth 3D runs in a new tab, not embedded. No API keys, admissions database or verified recommendations are included. Google imagery requires connectivity and coverage varies.
+
+Removed hardcoded departure/intake and fair claims from Abroad, added an editable persisted research journal, free-text university countries and deletion, fixed missing final pipeline stage and disappearing country filter options. Companion local/AI actions now allow any country. Pet styling includes lighting/hover polish, and drag state now handles pointer cancellation and window resizing. Build and companion-workspace regression checks passed. Live maps, mobile visuals and microphone calls were not browser-verified in this update. Broader app still has prototype features; do not claim all bugs have been eliminated. Budget currently converts to INR; the wider dashboard/academics still retain the user's existing personalized content.
+
 ## Latest update — 15 November 2026: spatial study sessions
 
 - Gather-inspired original furnished campus in `src/GardenMap.tsx`, with styling in `src/spaceImmersive.css`. Existing CSS remains the base.
@@ -145,7 +160,7 @@ Build PWA / companion foundations without promising native desktop features that
 
 - User: Aditya Puntambekar, MIT-WPU Pune, BSc (Hons) Data Science & Big Data Analytics, CGPA 8.67 after Sem 4.
 - The UI should feel cozy, calm, Notion-like, and use the existing Nordic Frost default unless asked otherwise.
-- Countries are **Sweden and Denmark only**.
+- Abroad now supports **worldwide exploration**, explicitly requested by the user; the earlier Nordic-only restriction is superseded.
 - Do not fabricate foreign-university deadlines, fees, requirements, or authoritative links. Keep such data user-entered or clearly marked for official verification.
 - Keep the existing “everything should be editable and deletable” expectation. When adding a create/add action, add an adjacent delete path as well.
 - Preserve current local data during changes. Never clear `localStorage` as part of ordinary development.
