@@ -1,0 +1,15 @@
+node_modules/
+dist/
+outputs/
+work/
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+server/space.js
+server/space.d.ts
+*.log
+.DS_Store
+Thumbs.db

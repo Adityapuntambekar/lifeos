@@ -1,0 +1,16 @@
+export type SpacePerson={id:string;name:string;color:string;x:number;y:number;zone:string;voice:boolean;status:string}
+export class SpaceVoice {
+ stream:MediaStream|null=null
+ private peers=new Map<string,{pc:RTCPeerConnection;audio:HTMLAudioElement;ice:RTCIceCandidateInit[]}>()
+ private allowed=new Set<string>()
+ private requesting=false
+ constructor(private send:(data:unknown)=>void,private warn:(message:string)=>void){}
+ async enable(){if(!navigator.mediaDevices?.getUserMedia)throw new Error('Voice needs HTTPS or localhost. Text chat and the world still work.');this.stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});this.requesting=true}
+ stop(){this.requesting=false;this.stream?.getTracks().forEach(t=>t.stop());this.stream=null;for(const id of [...this.peers.keys()])this.remove(id)}
+ private remove(id:string){const peer=this.peers.get(id);if(peer){peer.pc.close();peer.audio.pause();peer.audio.srcObject=null;this.peers.delete(id)}}
+ private create(id:string){const existing=this.peers.get(id);if(existing)return existing;let iceServers:RTCIceServer[]=[];try{iceServers=JSON.parse(import.meta.env.VITE_ICE_SERVERS||'[]')}catch{this.warn('Invalid voice ICE configuration.')}
+  const pc=new RTCPeerConnection({iceServers}),audio=new Audio();audio.autoplay=true;const peer={pc,audio,ice:[] as RTCIceCandidateInit[]};this.peers.set(id,peer);this.stream?.getTracks().forEach(track=>pc.addTrack(track,this.stream!));pc.onicecandidate=e=>{if(e.candidate)this.send({type:'signal',to:id,data:{candidate:e.candidate.toJSON()}})};pc.ontrack=e=>{audio.srcObject=e.streams[0];void audio.play().catch(()=>this.warn('Your browser blocked audio playback. Toggle voice off/on to retry.'))};pc.onconnectionstatechange=()=>{if(pc.connectionState==='failed')this.warn('Voice could not connect. Internet calls may need a TURN relay; see SPACE_SETUP.md.')};return peer
+ }
+ sync(id:string,people:SpacePerson[]){const me=people.find(p=>p.id===id);this.allowed=new Set(people.filter(p=>p.id!==id&&p.zone===me?.zone&&p.voice&&me?.voice).map(p=>p.id));for(const other of this.peers.keys())if(!this.allowed.has(other))this.remove(other);if(!me?.voice){if(!this.requesting)this.stop();return}this.requesting=false;if(!this.stream)return;for(const other of this.allowed)if(!this.peers.has(other)&&id<other){const peer=this.create(other);void(async()=>{try{await peer.pc.setLocalDescription(await peer.pc.createOffer());this.send({type:'signal',to:other,data:{description:peer.pc.localDescription}})}catch{this.warn('Could not start voice. Toggle it off and on to retry.')}})()}}
+ async signal(from:string,data:{candidate?:RTCIceCandidateInit;description?:RTCSessionDescriptionInit}){if(!this.allowed.has(from)||!this.stream)return;const peer=this.create(from);try{if(data.description){await peer.pc.setRemoteDescription(data.description);for(const ice of peer.ice)await peer.pc.addIceCandidate(ice);peer.ice=[];if(data.description.type==='offer'){await peer.pc.setLocalDescription(await peer.pc.createAnswer());this.send({type:'signal',to:from,data:{description:peer.pc.localDescription}})}}else if(data.candidate){if(peer.pc.remoteDescription)await peer.pc.addIceCandidate(data.candidate);else peer.ice.push(data.candidate)}}catch{this.warn('Voice negotiation failed. Toggle voice off and on to retry.')}}
+}

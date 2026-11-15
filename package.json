@@ -1,0 +1,28 @@
+{
+  "name": "lifeos",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "dev:lan": "vite --host 0.0.0.0",
+    "space:serve": "node --experimental-strip-types server/start.mjs"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "lucide-react": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "ws": "^8.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@types/ws": "^8.18.2",
+    "typescript": "latest",
+    "vite": "latest"
+  }
+}

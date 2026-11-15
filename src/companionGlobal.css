@@ -1,0 +1,25 @@
+.companions-page.companions-away { padding:0; margin:0; max-width:none; }
+.companions-away > .companion-welcome,.companions-away > .companion-footer { display:none; }
+.companions-away .companion-layout { display:contents; }
+.companions-away .buddy-gallery,.companions-away .buddy-room { display:none; }
+.companions-away .buddy-chat { display:none; }
+.companions-away.companion-chat-open .buddy-chat { display:block; position:fixed; bottom:112px; right:24px; width:min(370px,calc(100vw - 28px)); max-height:calc(100dvh - 140px); overflow:auto; z-index:9; box-shadow:0 12px 40px #27345233; }
+.companions-page .global-chat-close { display:none; }
+.companions-away .global-chat-close { display:grid; }
+.chat-title small { color:var(--muted); font-size:10px; }
+.companion-go { margin-top:10px; width:100%; }
+.pet-chat-trigger { background:transparent; font-size:44px; border-radius:50%; width:100%; height:100%; z-index:1; }
+.floating-pet > .pet-drag-handle { position:absolute; bottom:-10px; left:22px; background:var(--paper); border:1px solid var(--line); padding:4px; border-radius:50%; font-size:14px; z-index:2; touch-action:none; }
+.floating-pet { z-index:8; }
+.buddy-gallery .buddy-card { grid-template-columns:1fr; }
+.chat-log { overflow:auto; }
+.chat-them,.chat-you { white-space:pre-wrap; overflow-wrap:anywhere; }
+.companion-context { display:grid; gap:6px; font-size:10px; color:var(--muted); margin:9px 0; padding:8px; border:1px solid var(--line); border-radius:8px; }
+.companion-context button,.companion-choices button,.companion-confirm button { padding:6px 9px; border-radius:6px; color:var(--accent-deep); background:var(--base); font-size:11px; }
+.companion-choices { display:grid; gap:5px; max-height:130px; overflow:auto; }
+.companion-confirm { padding:9px; border:1px solid var(--line); border-radius:8px; margin:8px 0; font-size:11px; }
+.companion-confirm button { margin-right:6px; }
+.create-pet-modal p { font-size:12px; line-height:1.5; color:var(--muted); }
+.create-pet-modal { max-height:85dvh; overflow:auto; }
+.buddy-chat .chat-log { min-height:190px; }
+@media(prefers-reduced-motion:reduce){.floating-pet,.buddy-art > span,.room-buddy,.room-buddy i{animation:none}}
