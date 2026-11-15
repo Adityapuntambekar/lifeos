@@ -6,6 +6,8 @@ For another developer or model taking over, start with [`HANDOFF.md`](./HANDOFF.
 
 ## Shared Study Garden
 
+The campus now has a furnished top-down map, doorways, click-to-walk routes around walls and furniture, keyboard/touch movement, and a live people panel. Share a study goal, walk over to a friend, send a temporary reaction, or start a shared 15/25/50-minute focus session. The commons connects voice only within a nearby radius; study and meeting rooms connect the room, and the library stays silent. The invitation dialog explains how local, LAN and hosted links differ. This is original artwork inspired by the spatial collaboration experience of Gather.
+
 Open **Space** for an original spatial study world with shared avatars, room chat, a noticeboard, zone focus timers, and opt-in WebRTC audio. The session continues while navigating LifeOS. This feature adds a WebSocket server: run `npm run dev` locally, `npm run dev:lan` for private LAN access, or build then run `npm run space:serve` behind HTTPS for hosting. Read [`SPACE_SETUP.md`](./SPACE_SETUP.md) for invitations, voice/TURN requirements and current limits. This is an initial shared-space implementation, not full Gather feature parity.
 
 ## Phase 1 delivered

@@ -10,6 +10,8 @@ vite.config.js
 vite.config.d.ts
 server/space.js
 server/space.d.ts
+shared/*.js
+shared/*.d.ts
 *.log
 .DS_Store
 Thumbs.db

@@ -1,5 +1,16 @@
 # LifeOS — continuation handoff
 
+## Latest update — 15 November 2026: spatial study sessions
+
+- Gather-inspired original furnished campus in `src/GardenMap.tsx`, with styling in `src/spaceImmersive.css`. Existing CSS remains the base.
+- `shared/spaceWorld.ts` is the shared source for geometry, grid route finding, short-step collision validation and voice proximity. Keep frontend and server imports aligned. Do not edit emitted JS/declarations.
+- Space now walks routes instead of teleporting. Room shortcuts and Walk over use the same path finder; keyboard arrows/WASD or touch buttons take individual steps. Hidden Space stops walking while keeping the session connected.
+- People panel supports a shared 120-character study goal (save an empty goal to clear), availability and Walk over. Five temporary reactions expire after five seconds. Focus timers offer 15, 25 or 50 minutes per zone. Notes include Edit current note and replacement/clear controls.
+- Commons voice requires both people within 18 world-coordinate units. Other nonquiet zones use room-wide audio. Library is silent; zone changes mute. This is a hard radius, not smooth audio attenuation. No video, screensharing, seat reservation, map editor, persistent rooms or host permissions yet.
+- Invite dialog accepts/copies room links and explains why localhost cannot be shared with another PC. LAN HTTP cannot normally access a microphone; internet use still requires HTTPS and often TURN.
+- Run `npm run build` followed by `npm run test:space`. Automated tests cover shared routes/collisions, goals/reactions, proximity predicate, presence, chat isolation, muting, timers/notes, signalling restrictions, disconnect and both hosting modes. Browser preview attempts timed out in this environment; visual and live audio QA remain outstanding.
+- Private repository: https://github.com/Adityapuntambekar/lifeos. Runnable standalone copy: `outputs/LifeOS`; include the new `shared` directory when syncing it.
+
 ## Project location and commands
 
 ## Latest addition: Study Garden shared space
@@ -19,7 +30,7 @@ npm run dev
 npm run build
 ```
 
-The last production build passed successfully. This is a Vite + React + TypeScript client app; no server or database is currently used.
+This is a Vite + React + TypeScript app with a Node WebSocket server for Study Garden. Personal planning data stays in browser localStorage; shared room state lives in server memory, with no database.
 
 ## What is finished
 

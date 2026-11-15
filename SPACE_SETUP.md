@@ -53,14 +53,15 @@ VITE variables are included in browser bundles. Do not embed a provider master s
 
 ## Controls and room behaviour
 
-- Click the world to move; use WASD, arrow keys or the on-screen arrows. Zone shortcuts jump to a study area.
-- Four zones: quiet library, group-study table, commons and meeting nook. Voice is zone-based, not distance attenuation.
+- Click the world to walk around walls and furniture; use WASD, arrow keys or the on-screen arrows for individual steps. Room shortcuts and Walk over find a route through doorways. Walking stops if you navigate to another LifeOS page.
+- Four zones: quiet library, study studio, commons and meeting room. Commons voice reaches people within 18 map units; other rooms use zone-wide voice. There is no gradual distance attenuation. The library disables voice.
 - Shared chat is visible to every person in the same room. Microphone access is opt-in.
-- Start a 25-minute timer for your current zone. Any participant in that zone can stop/restart it.
+- Start a 15-, 25- or 50-minute timer for your current zone. Any participant in that zone can stop/restart it.
+- Save a goal in People to share what you are studying. Save an empty goal to clear it. Availability, goals and five-second reactions are visible to your room.
 - Noticeboard updates are shared; the last saved note wins.
 - Up to 12 people. Rooms, messages, board and timers live in server memory and disappear when everyone leaves or the server restarts.
 - Anyone possessing an invite code can join that room. There is no user login, host moderation or recording. The server does not read or share your academic/skills localStorage data.
-- Furnishings are decorative; movement is bounded to the world but does not yet use furniture collisions.
+- Walls and large furniture block movement on both client and server. Chairs are decorative floor accents; the room shortcuts provide accessible navigation without precise map clicks.
 
 ## Verification
 
