@@ -1,3 +1,4 @@
+import {validJournal} from './journalModel.ts'
 type Rule=(value:any)=>boolean
 const str:Rule=v=>typeof v==='string',num:Rule=v=>typeof v==='number'&&Number.isFinite(v),bool:Rule=v=>typeof v==='boolean'
 const obj:Rule=v=>v!==null&&typeof v==='object'&&!Array.isArray(v)
@@ -6,6 +7,7 @@ const list=(rule:Rule):Rule=>v=>Array.isArray(v)&&v.length<=10000&&v.every(rule)
 const records=(fields:Record<string,Rule>)=>list(shape({id:str,...fields}))
 const node:Rule=v=>shape({id:str,title:str})(v)&&(v.done===undefined||bool(v.done))&&(v.children===undefined||list(node)(v.children))
 const rules:Record<string,Rule>={
+ 'lifeos.journal':validJournal,'lifeos.profile':shape({name:str,workspace:str}),'lifeos.intention':str,
  'lifeos.tasks':records({title:str,category:str,done:bool}),
  'lifeos.calendar.events':records({title:str,date:v=>str(v)&&/^\d{4}-\d{2}-\d{2}$/.test(v)&&Number.isFinite(Date.parse(v)),time:str,type:str,notes:str}),
  'lifeos.academics.subjects':records({title:str,credits:num,units:records({name:str,status:str,complete:bool,difficulty:num})}),

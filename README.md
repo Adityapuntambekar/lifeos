@@ -1,5 +1,15 @@
 # LifeOS
 
+## Journal and a workspace for anyone
+
+Open **Journal** for two connected writing spaces. **Journal & create** provides rich text, headings, lists, checklists, tables, web links, undo/redo, daily reflections and creative templates. **Think & connect** provides Markdown write/split/read views, `[[Note title]]` links (including `[[Note title|label]]`), backlink navigation, linked-note creation and a local graph of direct connections. Renaming a knowledge note updates its wiki links outside code spans/blocks.
+
+Both modes have editable folders, tags, full-text search, pins, focus mode, local autosave, recoverable trash, plain-text/Markdown import and export. Export journal creates a JSON backup that Calendar → Restore can preview and restore. Permanently deleted notes cannot be recovered without a backup. Stored notes are not encrypted; do not mistake local storage for an encrypted vault. Journal content is excluded from companion AI context. Attachments, sketches/handwriting, OCR, encrypted note locks, collaboration, cloud sync, full Markdown vault folder import and plugins are not implemented. This is an original notes experience, not Apple Notes or Obsidian feature parity.
+
+Settings now lets anyone name their profile and workspace. Home shows actual tasks, recent pages and an editable intention instead of fabricated scores, study streaks or fixed personal deadlines. New users start with empty tasks, calendar, subjects and projects; existing saved records are preserved. Skills still includes editable starter learning trees. Existing generic planning tools remain available.
+
+Editor/data checks: `node tests/editor.mjs`, `node tests/journal.mjs`, `node tests/backup.mjs`, `node tests/pwa.mjs` after `npm run build`. Browser visual verification was blocked by local preview timeouts; manually check desktop/mobile layout on your PC.
+
 ## Installable app and offline use
 
 On Windows, stop the existing LifeOS terminal (Ctrl+C), then double-click **Start Installed LifeOS.bat**. It builds the production app and serves it at **http://localhost:5173**. Open that address in Chrome or Edge, then **Settings → Install LifeOS** when offered (or the browser's Install app menu). The first visit needs the server running; wait until Settings reports that the offline files are saved. Installation is browser-dependent, requires localhost or HTTPS, and was not manually verified on a real device in this update.

@@ -1,5 +1,15 @@
 # LifeOS — continuation handoff
 
+## Latest phase: Journal and generalized daily workspace
+
+- Explicit user direction: evolve beyond Aditya's personal planner into a flexible general-purpose workspace inspired by Notion. Apple Notes-inspired creative journaling and Obsidian-inspired knowledge notes are original implementations, not full clones.
+- `Journal.tsx` stays mounted (hidden outside Journal) to retain in-memory edits on navigation, including a failed-storage state. Data is `lifeos.journal`: `{notes,folders}`. Notes have mode, title, rich HTML or Markdown body, plain text, tags, folder ID, pin, timestamps, trash timestamp and optional local daily date. Corrupt data blocks loading/saving rather than overwriting it. Storage failure displays a warning/export action. Multi-tab simultaneous editing is not supported; use one editing tab.
+- `journalModel.ts`: schema checks, title uniqueness, wiki-link extraction/rename excluding code, templates and local dates. `JournalRichEditor.tsx`: Tiptap StarterKit, task lists/items and tables. `JournalMarkdown.tsx`: react-markdown + GFM, text-node wiki links, no raw HTML and no remote image loading. Rich and Markdown bundles load on demand and are included in PWA precaching.
+- Folders can be renamed/deleted (notes retained), notes can be pinned, searched, tagged, moved and soft-deleted/restored. Permanent delete asks confirmation. Daily pages reuse today's entry; templates never overwrite a note. Focus mode, graph with direct neighbors (up to 40), backlinks, text/Markdown import, individual text/Markdown export and journal backup export are included. Restore through Calendar validates journal/profile/intention data.
+- `HomeDashboard.tsx` replaces fabricated stats/deadlines with real tasks, editable intention and recent pages. `profile.ts`/Settings provide name/workspace. Fresh tasks, subjects, grades, calendar, projects and problem logs are empty. Stored existing collections are unchanged. Removed hardcoded academic identity, CGPA and dates from visible academic overview; skill learning trees are still starter templates.
+- Companion can guide to Journal, but cannot read or edit private notes. New `ids.ts` uses getRandomValues fallback on HTTP/LAN. Empty academic units now show 0% rather than NaN. Windows launchers check for the newly required editor dependency.
+- Passed build, DOM editor schema/commands/security checks, journal model/rename/schema checks, backup and PWA checks, and companion-workspace regression. Browser preview timed out; no real visual/manual typing test. Next: real desktop/mobile editing and accessibility QA, IndexedDB attachments/history, richer import/export, optional encrypted sync/account model. No drawings/OCR, attachments, note encryption, cloud sync or real-time note collaboration yet.
+
 ## Latest phase: installable offline app and safer restoration
 
 - `scripts/build-pwa.mjs` runs after Vite, generates 192/512 PNG icons and a content-versioned service worker precaching the build. Manifest is in `public/manifest.webmanifest`. Navigation is network-first with offline shell fallback; immutable build files are cache-first. External maps and `/space` are excluded. Activation of a waiting update requires the Settings action. Only LifeOS cache names are cleaned.
@@ -150,7 +160,7 @@ Build PWA / companion foundations without promising native desktop features that
 
 ## Known limitations / intentional deferrals
 
-- No Tiptap/BlockNote rich-text editor yet.
+- Tiptap rich-text editing is now available in Journal; it is not a general block/database editor across every workspace.
 - No dnd-kit drag-and-drop yet; list/tree ordering is currently fixed.
 - No IndexedDB, Supabase, OAuth, email reminder provider, Electron/Tauri wrapper, or LLM API integration yet.
 - The app is visually polished but it has not been browser-screenshot tested in this session; always run `npm run build` after a change and manually inspect mobile/desktop layouts when possible.

@@ -1,3 +1,4 @@
+import {newId} from './ids.ts'
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
 import { seedTree, defaultProjects } from './Skills'
 import { seededSubjects } from './Academics'
@@ -84,7 +85,7 @@ export default function Companions({navigate,pageActive,currentPage}:{navigate:(
  }
  const chooseAction=(action:string)=>{void send(action)}
  const context=indexWorkspace().find(item=>item.id===contextId)
- const createPet=()=>{const templates=[{id:'owl',emoji:'🦉'},{id:'cat',emoji:'🐈‍⬛'},{id:'fox',emoji:'🦊'},{id:'cloud',emoji:'☁️'},{id:'frog',emoji:'🐸'}];const template=templates.find(item=>item.id===newPet.template)!;const pet={id:crypto.randomUUID(),name:newPet.name.trim()||'Little friend',role:newPet.role,emoji:template.emoji,skin:newPet.look,mood:'curious',line:'Hello! I’m so happy we get to work together. ✨'};setBuddies(items=>[...items,pet]);setSelected(pet.id);setPetOn(true);setCreateOpen(false);setChat(items=>[...items,`${pet.name}: Hello! I’m so happy we get to work together. ✨`])}
+ const createPet=()=>{const templates=[{id:'owl',emoji:'🦉'},{id:'cat',emoji:'🐈‍⬛'},{id:'fox',emoji:'🦊'},{id:'cloud',emoji:'☁️'},{id:'frog',emoji:'🐸'}];const template=templates.find(item=>item.id===newPet.template)!;const pet={id:newId(),name:newPet.name.trim()||'Little friend',role:newPet.role,emoji:template.emoji,skin:newPet.look,mood:'curious',line:'Hello! I’m so happy we get to work together. ✨'};setBuddies(items=>[...items,pet]);setSelected(pet.id);setPetOn(true);setCreateOpen(false);setChat(items=>[...items,`${pet.name}: Hello! I’m so happy we get to work together. ✨`])}
  const deletePet=(id:string)=>{const remaining=buddies.filter(item=>item.id!==id);setBuddies(remaining);if(selected===id)setSelected(remaining[0]?.id||'');if(!remaining.length)setPetOn(false)}
  const startDrag=(event:ReactPointerEvent<HTMLDivElement>)=>{if((event.target as HTMLElement).closest('button,input'))return;setDrag({x:event.clientX,y:event.clientY,px:position.x,py:position.y});event.currentTarget.setPointerCapture(event.pointerId)}
  useEffect(()=>{const clamp=()=>setPosition(p=>({x:Math.min(0,Math.max(-window.innerWidth+110,p.x)),y:Math.min(0,Math.max(-window.innerHeight+120,p.y))}));window.addEventListener('resize',clamp);return()=>window.removeEventListener('resize',clamp)},[])

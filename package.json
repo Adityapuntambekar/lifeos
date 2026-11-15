@@ -12,10 +12,18 @@
     "test:space": "node tests/space-server.mjs && node tests/space-hosting.mjs"
   },
   "dependencies": {
+    "@tiptap/extension-placeholder": "^3.34.0",
+    "@tiptap/extension-table": "^3.34.0",
+    "@tiptap/extension-task-item": "^3.34.0",
+    "@tiptap/extension-task-list": "^3.34.0",
+    "@tiptap/react": "^3.34.0",
+    "@tiptap/starter-kit": "^3.34.0",
     "@vitejs/plugin-react": "latest",
     "lucide-react": "latest",
     "react": "latest",
     "react-dom": "latest",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "ws": "^8.23.0"
   },
   "devDependencies": {
@@ -23,6 +31,7 @@
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@types/ws": "^8.18.2",
+    "jsdom": "^31.0.1",
     "typescript": "latest",
     "vite": "latest"
   }

@@ -14,7 +14,7 @@ if errorlevel 1 (
   exit /b 1
 )
 
-if not exist "node_modules\ws\package.json" (
+if not exist "node_modules\@tiptap\react\package.json" (
   echo Installing LifeOS dependencies. This only happens the first time.
   call npm install
   if errorlevel 1 (

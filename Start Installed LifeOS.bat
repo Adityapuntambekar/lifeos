@@ -8,7 +8,7 @@ if errorlevel 1 (
  pause
  exit /b 1
 )
-if not exist node_modules\ws\package.json (
+if not exist node_modules\@tiptap\react\package.json (
  call npm ci
  if errorlevel 1 exit /b 1
 )

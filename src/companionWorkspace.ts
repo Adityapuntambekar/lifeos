@@ -1,3 +1,4 @@
+import {newId} from './ids.ts'
 import type { Destination } from './companionGuide'
 
 export type Kind='task'|'subject'|'unit'|'skill'|'project'|'university'|'event'|'track'
@@ -6,7 +7,7 @@ export type Entity={id:string;kind:Kind;title:string;path:string;page:Destinatio
 export type Intent={op:'add'|'rename'|'complete'|'delete'|'note';kind?:Kind;parent?:string;title?:string;target?:string;value?:string;date?:string;country?:string;awaiting?:'parent'|'title'|'target'|'value'|'country'|'date'}
 export type Reply={text:string;destination?:Destination;focusId?:string;pending?:Intent;confirm?:Intent;changed?:boolean;choices?:{label:string;value:string}[]}
 export const stores={task:'lifeos.tasks',subject:'lifeos.academics.subjects',skill:'lifeos.skills.tree',project:'lifeos.skills.projects',university:'lifeos.abroad.unis',event:'lifeos.calendar.events'}
-export const workspaceMap={Home:'Tasks and summary cards. Some summary scores are demo values, not connected to every tracker.',Academics:'Semester 5 subject/unit tree, exam readiness, Pomodoro, grade calculator and credit mapper. Other semesters and nested academic topics are not implemented.',Skills:'Programming, AI/ML, Maths & stats, Aptitude recursive learning trees; manual coding stats/problem log; Projects board.',Abroad:'Worldwide country/campus map with Google Earth links and university pipeline; manually rated readiness; budget sandbox; editable research/event journal. No verified admissions database or live research library integration.',Calendar:'Local month and agenda events, JSON backup/restore, ICS/CSV exports. Notification permission only; no scheduled notification delivery or Google two-way sync.',Companions:'Pet templates, local commands, workspace selection context and optional local AI connection.'}
+export const workspaceMap={Journal:'Rich-text journaling, Markdown knowledge notes, folders, tags, daily pages, backlinks, local graph and recoverable trash. Journal content is private and not indexed in the companion workspace. Guide navigation only; no journal editing commands yet.',Home:'Personal tasks, current intention, recent journal pages and workspace shortcuts.',Academics:'Semester 5 subject/unit tree, exam readiness, Pomodoro, grade calculator and credit mapper. Other semesters and nested academic topics are not implemented.',Skills:'Programming, AI/ML, Maths & stats, Aptitude recursive learning trees; manual coding stats/problem log; Projects board.',Abroad:'Worldwide country/campus map with Google Earth links and university pipeline; manually rated readiness; budget sandbox; editable research/event journal. No verified admissions database or live research library integration.',Calendar:'Local month and agenda events, JSON backup/restore, ICS/CSV exports. Notification permission only; no scheduled notification delivery or Google two-way sync.',Companions:'Pet templates, local commands, workspace selection context and optional local AI connection.'}
 export function describeIntent(plan:Intent){
  const location=(id?:string)=>id?(resolve(id)[0]?.path||id):''
  const target=plan.title||location(plan.target)||plan.kind||'item'
@@ -88,7 +89,7 @@ export function perform(intent:Intent,focusId?:string,confirmed=false):Reply{
  }
  if(!plan.title){if(kind==='task'&&plan.parent)plan.title=`${plan.parent} assignment`;else return {text:`What should I call the new ${kind}${parent?` under ${parent.path}`:''}?`,pending:{...plan,awaiting:'title'}}}
  const title=plan.title!.trim();if(!title||title.length>300)return {text:'Please give it a name between 1 and 300 characters.',pending:{...plan,title:undefined}}
- const id=crypto.randomUUID();let row:Row;let key:string;let page:Destination;let data:any;let list:Row[]
+ const id=newId();let row:Row;let key:string;let page:Destination;let data:any;let list:Row[]
  if(parent){key=parent.key;page=parent.page;data=load<any>(key,null);if(parent.kind==='track')list=data[parent.track!];else {const found=locate(data,parent.id);if(!found)throw new Error('Parent no longer exists');if(parent.kind==='subject')list=found.row.units;else{found.row.children??=[];list=found.row.children;found.row.done=false}}row=parent.kind==='subject'?{id,name:title,status:'Not started',complete:false,difficulty:2}:{id,title,done:false}}
  else {
    key=stores[kind as keyof typeof stores];if(!key)return {text:'That item type is not supported yet.'};page=kind==='task'?'Home':kind==='subject'?'Academics':kind==='project'?'Skills':kind==='university'?'Abroad':'Calendar';data=load<Row[]>(key,[]);list=data

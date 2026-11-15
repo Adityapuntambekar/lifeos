@@ -1,3 +1,4 @@
+import {newId} from './ids.ts'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowRight, Bell, CalendarDays, ChevronLeft, ChevronRight, Download, FileDown, MoreHorizontal, Plus, Trash2, Upload, X } from 'lucide-react'
 
@@ -8,11 +9,7 @@ type EventType = 'Exam' | 'Fair' | 'Deadline' | 'Study block' | 'Personal'
 type Event = { id:string; title:string; date:string; time:string; type:EventType; notes:string }
 type View = 'Month' | 'Agenda'
 const types:EventType[]=['Exam','Fair','Deadline','Study block','Personal']
-export const seeds:Event[]=[
-  {id:'exam-start',title:'End-term exam window begins',date:'2026-11-23',time:'09:00',type:'Exam',notes:'Confirm individual subject timetable with college.'},
-  {id:'exam-end',title:'End-term exam window ends',date:'2026-12-15',time:'18:00',type:'Exam',notes:'Window stated in LifeOS plan.'},
-  {id:'chalmers',title:'Chalmers education fair',date:'2026-12-06',time:'10:00',type:'Fair',notes:'Sheraton Grand Hotel, Pune.'},
-]
+export const seeds:Event[]=[]
 const read=<T,>(key:string,fallback:T):T=>{try{return JSON.parse(localStorage.getItem(key)||'') as T}catch{return fallback}}
 const iso=(date:Date)=>`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`
 const title=(date:Date)=>date.toLocaleDateString('en-IN',{month:'long',year:'numeric'})
@@ -25,7 +22,7 @@ export default function Calendar() {
  useEffect(()=>{const refresh=()=>setEvents(read('lifeos.calendar.events',seeds));window.addEventListener('lifeos-data-updated',refresh);return()=>window.removeEventListener('lifeos-data-updated',refresh)},[])
  const days=useMemo(()=>{const start=new Date(cursor.getFullYear(),cursor.getMonth(),1);const offset=(start.getDay()+6)%7;const beginning=new Date(cursor);beginning.setDate(1-offset);return Array.from({length:42},(_,index)=>{const day=new Date(beginning);day.setDate(beginning.getDate()+index);return day})},[cursor])
  const eventsFor=(day:Date)=>events.filter(event=>event.date===iso(day)).sort((a,b)=>a.time.localeCompare(b.time))
- const save=()=>{if(!draft.title.trim())return;setEvents(items=>[...items,{...draft,id:crypto.randomUUID()}]);setModal(false)}
+ const save=()=>{if(!draft.title.trim())return;setEvents(items=>[...items,{...draft,id:newId()}]);setModal(false)}
  const exportIcs=()=>{const now=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');const content=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//LifeOS//EN',...events.map(event=>{const time=(event.time||'00:00').replace(':','')+'00';const date=event.date.replaceAll('-','');return ['BEGIN:VEVENT',`UID:${event.id}@lifeos`,`DTSTAMP:${now}`,`DTSTART:${date}T${time}`,`SUMMARY:${event.title.replaceAll(',','\\,')}`,`DESCRIPTION:${event.notes.replaceAll('\n','\\n')}`,'END:VEVENT'].join('\r\n')}),'END:VCALENDAR'].join('\r\n');download('lifeos-calendar.ics',content,'text/calendar')}
  const exportCsv=()=>download('lifeos-calendar.csv',['Title,Date,Time,Type,Notes',...events.map(event=>`"${event.title.replaceAll('"','""')}",${event.date},${event.time},${event.type},"${event.notes.replaceAll('"','""')}"`)].join('\n'),'text/csv')
  const backup=()=>{try{downloadBackup(localStorage)}catch(error){window.alert(error instanceof Error?error.message:'Could not export backup.')}}

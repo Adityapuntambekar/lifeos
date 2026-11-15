@@ -1,3 +1,4 @@
+import {newId} from './ids.ts'
 export type UnitRequest = { course: string; name: string }
 export function parseUnitRequest(text:string):UnitRequest|null {
  const match=text.trim().replace(/[.!?]+$/,'').match(/\b(?:add|create|make)\s+(?:me\s+)?(?:an?\s+)?(?:unit|topic|skill)\s+(?:for|in|under|to)\s+(.+?)(?:\s+(?:called|named|titled)\s+(.+))?$/i)
@@ -18,7 +19,7 @@ export function addLearningUnit(request:UnitRequest):{text:string;destination:'S
    const tree=JSON.parse(localStorage.getItem('lifeos.skills.tree')||'null') as Record<string,SkillNode[]>|null
    if(!tree||!Array.isArray(tree[track]))return {text:'Open Skills once to initialise your learning tree, then ask me again. Nothing was added yet.',destination:'Skills'}
    if(tree[track].some(node=>normalise(node.title)===normalise(name)))return {text:`“${name}” already exists in Skills → ${track}.`,destination:'Skills'}
-   tree[track].push({id:crypto.randomUUID(),title:name,done:false})
+   tree[track].push({id:newId(),title:name,done:false})
    localStorage.setItem('lifeos.skills.tree',JSON.stringify(tree))
    localStorage.setItem('lifeos.skills.activeTab',track)
    window.dispatchEvent(new Event('lifeos-skills-updated'))
@@ -30,7 +31,7 @@ export function addLearningUnit(request:UnitRequest):{text:string;destination:'S
  const subject=subjects.find(item=>normalise(item.title)===query)
  if(!subject)return {text:`I couldn’t find a subject called “${request.course}”. Nothing was added. Open Academics and use its exact subject name, or use AI/ML, Programming, Maths or Aptitude for a Skills track.`,destination:'Academics'}
  if(subject.units.some(unit=>normalise(unit.name)===normalise(name)))return {text:`“${name}” already exists under ${subject.title}.`,destination:'Academics'}
- subject.units.push({id:crypto.randomUUID(),name,status:'Not started',complete:false,difficulty:2})
+ subject.units.push({id:newId(),name,status:'Not started',complete:false,difficulty:2})
  localStorage.setItem('lifeos.academics.subjects',JSON.stringify(subjects))
  window.dispatchEvent(new Event('lifeos-academics-updated'))
  return {text:`Done! I added “${name}” to ${subject.title}. Find it in Academics → Overview → expand ${subject.title}.`,destination:'Academics'}

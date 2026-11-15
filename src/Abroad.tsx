@@ -1,3 +1,4 @@
+import {newId} from './ids.ts'
 import { useEffect, useMemo, useState } from 'react'
 import { ArrowRight, BookOpen, CalendarDays, Check, ChevronRight, CircleDollarSign, ExternalLink, FileText, Filter, GraduationCap, MapPin, Plane, Plus, Search, SlidersHorizontal, Sparkles, Trash2, X } from 'lucide-react'
 
@@ -38,7 +39,7 @@ export default function Abroad() {
   const active = unis.find(uni => uni.id === selected) || unis[0]
   const overall = Math.round(readiness.reduce((sum,item) => sum + item.value,0)/readiness.length)
   const update = (id:string, changes:Partial<University>) => setUnis(items => items.map(item => item.id === id ? {...item,...changes} : item))
-  const createUni = () => { const id=crypto.randomUUID(); setUnis(items => [...items,{id,name:'New university',city:'Set city',country:'Set country',programmes:'Set programme',stage:'Known about',fit:0,notes:'',requirements:verified,lat:58,lng:15,saved:false}]); setSelected(id) }
+  const createUni = () => { const id=newId(); setUnis(items => [...items,{id,name:'New university',city:'Set city',country:'Set country',programmes:'Set programme',stage:'Known about',fit:0,notes:'',requirements:verified,lat:58,lng:15,saved:false}]); setSelected(id) }
   return <div className="abroad-page">
     <section className="abroad-heading"><div><div className="academic-breadcrumb"><Plane size={14}/> Study abroad <ChevronRight size={14}/><b>Worldwide</b></div><h1>Beyond borders</h1><p>Discover countries, explore campuses, and build your own path.</p></div><div className="departure-chip"><Plane size={16}/><span>Your journey</span><b>Anywhere</b></div></section>
     <div className="abroad-tabs">{(['Explore map','Pipeline','Readiness','Papers & fairs','Budget'] as Tab[]).map(item => <button key={item} onClick={() => setTab(item)} className={tab===item?'active':''}>{item}</button>)}</div>
