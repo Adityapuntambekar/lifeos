@@ -12,7 +12,9 @@ This package specifies the requested Gather-inspired platform. It does not claim
 
 **Reference interpretation:** the user-provided [Gather virtual-office page](https://www.gather.town/virtual-office) emphasizes discoverable teammates, focus controls, office templates, object customization and multiple floors. We adopt those interaction principles and the user's requested pixel-art direction while creating original artwork, terminology and layouts. The reference is not a claim that every requested feature is available in Gather or already in LifeOS.
 
-**Recommended next implementation milestone:** persistent workspace identity and map revisions, a coherent pixel-art renderer/HUD, and the desk-to-task-to-note resume journey. SFU privacy must pass adversarial tests before enabling private audio/video rooms. Recording, integrations and native applications follow separate release gates.
+**Initial local implementation now available:** disk-persisted shared maps/revisions, browser-key ownership, Canvas pixel interiors, immersive studio, and personal desk/task/note checkpoints. See the root README for limits, storage and recovery details. These are a subset of the planned cloud foundation; the architecture below remains a target.
+
+**Planned foundation milestone:** persistent workspace identity and map revisions, a coherent pixel-art renderer/HUD, and the desk-to-task-to-note resume journey. SFU privacy must pass adversarial tests before enabling private audio/video rooms. Recording, integrations and native applications follow separate release gates.
 
 ## Specification conventions
 

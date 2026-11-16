@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "dev:lan": "vite --host 0.0.0.0",
     "space:serve": "node --experimental-strip-types server/start.mjs",
-    "test:space": "node tests/space-server.mjs && node tests/space-seating.mjs && node tests/studio.mjs && node tests/space-hosting.mjs",
+    "test:space": "node tests/space-server.mjs && node tests/space-seating.mjs && node tests/studio.mjs && node tests/space-hosting.mjs && node tests/workspace-persistence.mjs",
     "test:creative": "node tests/creative-upgrade.mjs && node tests/creative-ui.mjs && node tests/studio-ui.mjs && node tests/companion-brain.mjs"
   },
   "dependencies": {

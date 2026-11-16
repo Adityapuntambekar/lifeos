@@ -1,4 +1,4 @@
 {
   "compilerOptions": { "composite": true, "module": "ESNext", "moduleResolution": "Bundler", "allowSyntheticDefaultImports": true, "rewriteRelativeImportExtensions": true },
-  "include": ["vite.config.ts", "server/space.ts", "shared/spaceWorld.ts", "shared/studioWorld.ts"]
+  "include": ["vite.config.ts", "server/space.ts", "server/workspaceStore.ts", "shared/spaceWorld.ts", "shared/studioWorld.ts"]
 }

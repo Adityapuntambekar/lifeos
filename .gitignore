@@ -15,3 +15,7 @@ shared/*.d.ts
 *.log
 .DS_Store
 Thumbs.db
+
+data/
+server/workspaceStore.js
+server/workspaceStore.d.ts

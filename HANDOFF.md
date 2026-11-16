@@ -1,5 +1,15 @@
 # LifeOS — continuation handoff
 
+## Spatial foundation update — 16 November 2026
+
+- Shared workspace names, maps, revisions and hashed owner identity now persist in `data/workspaces` on the local server. Set `LIFEOS_DATA_DIR` to an absolute directory to relocate storage. Use one server process per directory. Stop the server before copying this folder for backup; browser JSON export does not include server maps.
+- The creator browser retains editing ownership across restarts. Guests can join with the invite code but cannot publish maps. The owner key stays in `lifeos.space.identity` on the same browser origin; it is deliberately excluded from exported backups. Clearing browser storage, changing the URL/port or switching browsers loses access to that key. There is no account-based recovery yet. Keep the original browser profile, or save a shared map draft locally before migrating. Invite codes grant entry, not confidentiality or enterprise authentication.
+- Space → Explore my rooms → My desk links a Home task and Journal note, automatically saves a private stopping-point text, and saves the current room/seat through “Save this spot”. “Resume at my desk” walks back to an existing saved seat; removed rooms/seats are handled without inventing a destination. Desk checkpoints and workspace shortcuts are included in browser JSON backups. Desk checkpoints currently apply to personal rooms only.
+- Room interiors now use original pixel-art Canvas scenery with the existing collision model and sprite avatars. SVG remains the fallback and editor thumbnail renderer. “Immersive view” expands the studio; Escape exits. Original pet artwork is unchanged.
+- This is a local foundation release, not completion of the entire enterprise P1 specification. Cloud accounts, PostgreSQL/Redis, Phaser, SFU/video, recording, SSO and native apps remain proposed. Chat, timers and whiteboard are still session-only. The small-group limit remains 12.
+- Verification: production build; existing space, seating, studio and development/production hosting tests; persistent restart/revision/owner/guest/corrupt-file/disk-failure tests; Studio DOM desk links/resume and immersive exit; backup tests. DOM tests use the SVG fallback; actual Canvas appearance and live microphone behavior still require interactive browser QA.
+
+
 ## Latest deliverable: full spatial-platform specification (design only)
 
 - User supplied a seven-area Gather-inspired platform brief and explicitly requested PRD/journeys, UI wireframes/component breakdown and architecture/SFU/schema. Also supplied https://www.gather.town/virtual-office, which was read alongside official media/browser/integration docs.
