@@ -1,3 +1,4 @@
+import {takeReveal} from './reveal'
 import {newId} from './ids.ts'
 import { useEffect, useMemo, useState } from 'react'
 import { ArrowRight, BookOpen, CalendarDays, Check, ChevronRight, CircleDollarSign, ExternalLink, FileText, Filter, GraduationCap, MapPin, Plane, Plus, Search, SlidersHorizontal, Sparkles, Trash2, X } from 'lucide-react'
@@ -26,9 +27,9 @@ export default function Abroad() {
   useEffect(() => localStorage.setItem('lifeos.abroad.unis',JSON.stringify(unis)),[unis])
   useEffect(()=>{
     const refresh=()=>setUnis(read('lifeos.abroad.unis',seededUniversities))
-    const reveal=()=>{const id=localStorage.getItem('lifeos.companions.context.Abroad');if(id){setSelected(id);setTab('Explore map')}}
-    reveal();window.addEventListener('lifeos-data-updated',refresh);window.addEventListener('lifeos-reveal',reveal)
-    return()=>{window.removeEventListener('lifeos-data-updated',refresh);window.removeEventListener('lifeos-reveal',reveal)}
+    const reveal=()=>{const id=takeReveal('Abroad')?.id||localStorage.getItem('lifeos.companions.context.Abroad');if(id){setSelected(id);setTab('Explore map');setQuery('');setCountry('All')}}
+    reveal();window.addEventListener('lifeos-data-updated',refresh);window.addEventListener('lifeos-reveal',reveal);window.addEventListener('lifeos-open-result',reveal)
+    return()=>{window.removeEventListener('lifeos-data-updated',refresh);window.removeEventListener('lifeos-reveal',reveal);window.removeEventListener('lifeos-open-result',reveal)}
   },[])
   useEffect(() => localStorage.setItem('lifeos.abroad.selected',JSON.stringify(selected)),[selected])
   useEffect(() => localStorage.setItem('lifeos.abroad.readiness',JSON.stringify(readiness)),[readiness])

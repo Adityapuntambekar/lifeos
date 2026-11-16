@@ -1,5 +1,13 @@
 # LifeOS
 
+## Your Home, your workspace
+
+Open **Home → Customize** to choose Balanced, Focus or Writer, reorder cards, show/hide them, choose half/full width, and adjust spacing and atmosphere. Cards include your intention, shortcuts, tasks, recent notes, upcoming events and active projects. Hiding a card keeps its content. Your layout is saved locally and included in Calendar backups.
+
+Press **Ctrl+K** (Mac: **Cmd+K**) or click **Search your workspace** to search saved notes, tasks, subjects, units, nested learning topics, projects, universities and calendar events. Filter results by workspace, use arrow keys and Enter, or click a result to open it. Matching learning branches expand; calendar events open in the agenda. A task found in a hidden Home card is temporarily revealed. Search stays on your device and excludes trashed notes, AI configuration and companion conversations; queries are not saved.
+
+Shared surfaces, focus indicators, dark-theme contrast and responsive Home cards have been refreshed. Automated checks cover search, layout presets/reordering, backup compatibility, editors, journals, PWA behavior and companion commands. Run `node tests/search-home.mjs` for the new phase. Real-browser visual and keyboard QA remains outstanding because the local browser preview timed out.
+
 ## Journal and a workspace for anyone
 
 Open **Journal** for two connected writing spaces. **Journal & create** provides rich text, headings, lists, checklists, tables, web links, undo/redo, daily reflections and creative templates. **Think & connect** provides Markdown write/split/read views, `[[Note title]]` links (including `[[Note title|label]]`), backlink navigation, linked-note creation and a local graph of direct connections. Renaming a knowledge note updates its wiki links outside code spans/blocks.
@@ -20,7 +28,7 @@ Calendar → Backup exports supported personal data and theme, excluding AI conf
 
 Abroad now supports worldwide country, city and campus exploration with embedded Google Maps and Google Earth links. Saved universities remain editable and deletable; no country restriction applies. Full Earth 3D opens separately. Existing personal data is preserved, and new university collections start empty. Internet access is required for maps.
 
-LifeOS is a calm, local-first personal command center for studies, career growth, research, and a Sweden/Denmark master’s plan.
+LifeOS is a local-first workspace for writing, studying, planning, career growth and worldwide university exploration.
 
 For another developer or model taking over, start with [`HANDOFF.md`](./HANDOFF.md).
 

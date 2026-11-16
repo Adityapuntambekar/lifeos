@@ -1,0 +1,8 @@
+export const widgetIds=['intention','shortcuts','tasks','notes','schedule','projects'] as const
+export type WidgetId=typeof widgetIds[number]
+export type HomeLayout={order:WidgetId[];hidden:WidgetId[];wide:WidgetId[];density:'comfortable'|'compact';cover:'sage'|'lavender'|'sand'}
+export const widgetNames:Record<WidgetId,string>={intention:'Current intention',shortcuts:'Workspace shortcuts',tasks:'Your tasks',notes:'Recent pages',schedule:'Coming up',projects:'Active projects'}
+export function defaultHome():HomeLayout{return {order:[...widgetIds],hidden:['projects'],wide:['intention','shortcuts'],density:'comfortable',cover:'sage'}}
+export function validHome(v:any):v is HomeLayout{const ids=(x:any)=>Array.isArray(x)&&x.every(id=>widgetIds.includes(id))&&new Set(x).size===x.length;return !!v&&ids(v.order)&&v.order.length===widgetIds.length&&ids(v.hidden)&&ids(v.wide)&&['comfortable','compact'].includes(v.density)&&['sage','lavender','sand'].includes(v.cover)}
+export function moveWidget(layout:HomeLayout,id:WidgetId,direction:-1|1){const order=[...layout.order],from=order.indexOf(id),to=from+direction;if(from<0||to<0||to>=order.length)return layout;[order[from],order[to]]=[order[to],order[from]];return {...layout,order}}
+export function homePreset(name:'balanced'|'focus'|'writer'):HomeLayout{const base=defaultHome();if(name==='focus')return {...base,order:['tasks','intention','schedule','shortcuts','notes','projects'],hidden:['notes','projects'],wide:['tasks','intention']};if(name==='writer')return {...base,order:['notes','intention','shortcuts','tasks','schedule','projects'],hidden:['projects','schedule'],wide:['notes','intention']};return base}

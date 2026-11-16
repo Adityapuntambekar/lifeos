@@ -1,3 +1,4 @@
+import {takeReveal} from './reveal'
 import {newId} from './ids.ts'
 import { useEffect, useMemo, useState } from 'react'
 import { BookOpen, CalendarClock, Check, ChevronDown, ChevronRight, CirclePlus, ExternalLink, FileText, GripVertical, MoreHorizontal, Plus, RotateCcw, Sparkles, Timer, Trash2, X } from 'lucide-react'
@@ -35,8 +36,8 @@ export default function Academics() {
   }, [])
   useEffect(() => localStorage.setItem('lifeos.academics.grades', JSON.stringify(grades)), [grades])
   useEffect(()=>{
-    const reveal=()=>{const id=localStorage.getItem('lifeos.companions.context.Academics');const subject=read<Subject[]>('lifeos.academics.subjects',[]).find(item=>item.id===id||item.units.some(unit=>unit.id===id));if(subject){setTab('Overview');setExpanded(subject.id)}}
-    reveal();window.addEventListener('lifeos-reveal',reveal);return()=>window.removeEventListener('lifeos-reveal',reveal)
+    const reveal=()=>{const id=takeReveal('Academics')?.id||localStorage.getItem('lifeos.companions.context.Academics');const subject=read<Subject[]>('lifeos.academics.subjects',[]).find(item=>item.id===id||item.units.some(unit=>unit.id===id));if(subject){setTab('Overview');setExpanded(subject.id)}}
+    reveal();window.addEventListener('lifeos-reveal',reveal);window.addEventListener('lifeos-open-result',reveal);return()=>{window.removeEventListener('lifeos-reveal',reveal);window.removeEventListener('lifeos-open-result',reveal)}
   },[])
   useEffect(() => localStorage.setItem('lifeos.academics.sgpas', JSON.stringify(sgpaHistory)), [sgpaHistory])
   useEffect(() => localStorage.setItem('lifeos.academics.minutes', String(minutes)), [minutes])

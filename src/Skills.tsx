@@ -1,3 +1,4 @@
+import {takeReveal} from './reveal'
 import {newId} from './ids.ts'
 import { useEffect, useState, type CSSProperties } from 'react'
 import { Check, ChevronDown, ChevronRight, Code2, ExternalLink, Flame, GitBranch, GripVertical, Plus, Sparkles, Target, Trash2, Trophy, X } from 'lucide-react'
@@ -70,14 +71,14 @@ export default function Skills() {
   },[])
   useEffect(()=>{
     const reveal=()=>{
-      const id=localStorage.getItem('lifeos.companions.context.Skills');if(!id)return
+      const id=takeReveal('Skills')?.id||localStorage.getItem('lifeos.companions.context.Skills');if(!id)return
       if(read<Project[]>('lifeos.skills.projects',[]).some(item=>item.id===id)){setTab('Projects');return}
       const current=read<Tree>('lifeos.skills.tree',seedTree());const expanded=new Set<string>()
       const find=(nodes:Node[]):boolean=>nodes.some(node=>{if(node.id===id){expanded.add(node.id);return true}if(node.children&&find(node.children)){expanded.add(node.id);return true}return false})
       for(const [track,nodes] of Object.entries(current))if(id===`track:${track}`||find(nodes)){setTab(track as TrackKey);setOpen(expanded);return}
     }
-    reveal();window.addEventListener('lifeos-reveal',reveal)
-    return()=>window.removeEventListener('lifeos-reveal',reveal)
+    reveal();window.addEventListener('lifeos-reveal',reveal);window.addEventListener('lifeos-open-result',reveal)
+    return()=>{window.removeEventListener('lifeos-reveal',reveal);window.removeEventListener('lifeos-open-result',reveal)}
   },[])
   const trackProgress = tab === 'Projects' ? 0 : allProgress(tree[tab])
   const setNode = (track: TrackKey, id: string, transform: (node: Node) => Node | null) => setTree(all => ({ ...all, [track]: modify(all[track], id, transform) }))

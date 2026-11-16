@@ -1,3 +1,4 @@
+import {takeReveal} from './reveal'
 import {newId} from './ids.ts'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowRight, Bell, CalendarDays, ChevronLeft, ChevronRight, Download, FileDown, MoreHorizontal, Plus, Trash2, Upload, X } from 'lucide-react'
@@ -18,6 +19,7 @@ const download=(name:string,content:string,type:string)=>{const link=document.cr
 export default function Calendar() {
  const [restoreFile,setRestoreFile]=useState<File|null>(null)
  const [view,setView]=useState<View>('Month');const [cursor,setCursor]=useState(()=>new Date(new Date().getFullYear(),new Date().getMonth(),1));const [events,setEvents]=useState<Event[]>(()=>read('lifeos.calendar.events',seeds));const [modal,setModal]=useState(false);const [draft,setDraft]=useState<Event>({id:'',title:'',date:iso(new Date()),time:'09:00',type:'Study block',notes:''});const [notifications,setNotifications]=useState(typeof Notification!=='undefined'&&Notification.permission==='granted');const importer=useRef<HTMLInputElement>(null)
+ useEffect(()=>{const reveal=()=>{if(takeReveal('Calendar')?.id)setView('Agenda')};reveal();window.addEventListener('lifeos-open-result',reveal);return()=>window.removeEventListener('lifeos-open-result',reveal)},[])
  useEffect(()=>localStorage.setItem('lifeos.calendar.events',JSON.stringify(events)),[events])
  useEffect(()=>{const refresh=()=>setEvents(read('lifeos.calendar.events',seeds));window.addEventListener('lifeos-data-updated',refresh);return()=>window.removeEventListener('lifeos-data-updated',refresh)},[])
  const days=useMemo(()=>{const start=new Date(cursor.getFullYear(),cursor.getMonth(),1);const offset=(start.getDay()+6)%7;const beginning=new Date(cursor);beginning.setDate(1-offset);return Array.from({length:42},(_,index)=>{const day=new Date(beginning);day.setDate(beginning.getDate()+index);return day})},[cursor])

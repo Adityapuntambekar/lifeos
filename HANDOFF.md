@@ -1,5 +1,14 @@
 # LifeOS — continuation handoff
 
+## Latest phase: customizable Home and local workspace search
+
+- `HomeDashboard.tsx`, `CustomizeHome.tsx`, `homeLayout.ts`: six reorderable cards, visibility/width controls, Balanced/Focus/Writer presets, density and cover colors. Layout persists at `lifeos.home.layout`, validated and supported by `backup.ts`. Hiding/resetting layout never deletes content. Saved notes, events and projects open directly; search can temporarily reveal a hidden task card without changing the saved layout.
+- `searchModel.ts` builds an in-memory index from saved local content: workspaces, tasks, journal plaintext/tags/folders, subjects/units, nested skill topics, projects, universities and calendar. Accent-insensitive multiword matching with title ranking, workspace filters and safe snippets. Corrupt JSON sections are skipped with warnings. Trashed notes, companion chat and AI configuration are excluded. No external search, AI request or persisted query.
+- `GlobalSearch.tsx` replaces the page-only palette, using a native dialog, keyboard navigation and result counts. Ctrl/Cmd+K and header search open it. `reveal.ts` is a one-shot in-memory destination queue; App dispatches `lifeos-open-result`, workspace handlers expand/select the target, and App scrolls/focuses/highlights its matching data attribute. Journal retains its existing mounted-editor navigation event. Calendar results select Agenda.
+- `workspacePolish.css` supplies shared surfaces, spacing, focus states, responsive Home/search/customization, theme-aware dialogs and dark-surface corrections. The header calendar button now navigates to Calendar.
+- Build and search/Home, backup, journal, PWA, editor and companion-workspace regression checks pass. No real-browser visual or keyboard verification: browser preview attempts timed out. Next verification should exercise small-screen dialogs, hidden-card search, nested topic reveal and keyboard focus on a real browser. No cloud services, account system or collaboration changes in this phase.
+- Keep `outputs/LifeOS` synchronized with source, tests, docs and current dist. Existing browser data stays at its original origin; run the launcher on localhost:5173 to retain access.
+
 ## Latest phase: Journal and generalized daily workspace
 
 - Explicit user direction: evolve beyond Aditya's personal planner into a flexible general-purpose workspace inspired by Notion. Apple Notes-inspired creative journaling and Obsidian-inspired knowledge notes are original implementations, not full clones.
