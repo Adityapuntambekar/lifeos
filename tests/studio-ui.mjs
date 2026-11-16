@@ -29,5 +29,12 @@ try{
  await click(button('Immersive view'));assert.ok(document.querySelector('.is-immersive'));await act(async()=>window.dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Escape'})));assert.equal(document.querySelector('.is-immersive'),null)
  await click(button('Open Journal'));assert.equal(journal,true)
  await act(async()=>root.render(createElement(Studio,{key:'reload',name:'Tester',color:'#8569c4',back:()=>{},write:()=>{}})));assert.equal(document.querySelectorAll('.studio-rooms>button[aria-pressed]').length,5)
+ let sharedRequest
+ const shared={world:saved(),revision:0,me:{id:'owner',name:'Tester',color:'#8569c4',x:10,y:12,seat:'',interior:saved().rooms[0].id,voice:false},people:[],host:true,send:value=>sharedRequest=value,voice:()=>{},voiceBusy:false,messages:[]}
+ const renderShared=async()=>act(async()=>root.render(createElement(Studio,{key:'shared-publish',name:'Tester',color:'#8569c4',back:()=>{},write:()=>{},shared:{...shared}})))
+ await renderShared();await click(button('Edit map'));await click(button('Publish to everyone'));assert.ok(document.querySelector('.is-building'));assert.equal(button('Saving…').disabled,true);assert.ok(sharedRequest.requestId)
+ shared.publishResult={requestId:sharedRequest.requestId,ok:false,text:'Disk full'};await renderShared();assert.ok(document.querySelector('.is-building'));assert.match(document.querySelector('.studio-notice').textContent,/Disk full/);assert.equal(button('Publish to everyone').disabled,false)
+ await click(button('Publish to everyone'));shared.publishResult={requestId:'unrelated-request',ok:true};await renderShared();assert.ok(document.querySelector('.is-building'))
+ shared.publishResult={requestId:sharedRequest.requestId,ok:true};shared.revision=1;await renderShared();assert.equal(document.querySelector('.is-building'),null);assert.match(document.querySelector('.studio-notice').textContent,/saved on the server/)
  console.log('Studio DOM checks passed: room templates, valid saved maps, placement undo, dragging, room deletion undo/redo, atlas navigation, Journal navigation and reload persistence.')
 }finally{await act(async()=>root.unmount());await server.close();dom.window.close()}

@@ -1,5 +1,14 @@
 # LifeOS
 
+## Continuation review — 17 November 2026
+
+Reviewed the earlier user requirements, spatial specification, current source, local commit and standalone copy before continuing. The local foundation commit had not yet reached GitHub. The current milestone remains persistent local workspaces, pixel interiors and personal desk/task/note resume; the full Gather-inspired specification remains the roadmap.
+
+Fixed an additional shared-map failure case: publishing now waits for a request-matched server acknowledgement. Editing is paused during the request; rejection keeps the draft open and shows the server error. A timeout leaves the local draft available instead of claiming success. Acknowledgements are sent only after persistence succeeds. Tests cover failed publishing, unrelated acknowledgements, retry and confirmed success.
+
+Validation: production build, complete space/server/hosting/persistence suite, and Studio DOM tests. Browser visual QA was attempted again at a running local server on port 5192, but the in-app browser returned ERR_CONNECTION_TIMED_OUT. Canvas appearance and live microphones are still not visually/audibly verified. Preserve original pets; do not treat this as complete cloud identity, SFU, video or enterprise delivery.
+
+
 ## Spatial foundation update — 16 November 2026
 
 - Shared workspace names, maps, revisions and hashed owner identity now persist in `data/workspaces` on the local server. Set `LIFEOS_DATA_DIR` to an absolute directory to relocate storage. Use one server process per directory. Stop the server before copying this folder for backup; browser JSON export does not include server maps.
