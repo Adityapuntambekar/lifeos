@@ -1,5 +1,9 @@
 # LifeOS
 
+## Spatial platform design package
+
+The proposed Gather-inspired platform is specified in [docs/spatial-platform/README.md](./docs/spatial-platform/README.md): PRD and user journeys, UI wireframes/art direction, and technical architecture including authoritative SFU privacy rules and database schema. This is a design deliverable, not a claim that cloud media, SSO, recordings or native apps are implemented. The recommended next engineering milestone is persistent workspaces/maps, a coherent pixel-art world/HUD and the desk→task→note resume journey.
+
 ## Space Studio: build a connected collection of rooms
 
 The previous companion appearance is restored across the gallery, room and floating pet; the chat improvements remain. No true 3D pet renderer has been added.

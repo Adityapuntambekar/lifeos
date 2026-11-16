@@ -1,5 +1,12 @@
 # LifeOS — continuation handoff
 
+## Latest deliverable: full spatial-platform specification (design only)
+
+- User supplied a seven-area Gather-inspired platform brief and explicitly requested PRD/journeys, UI wireframes/component breakdown and architecture/SFU/schema. Also supplied https://www.gather.town/virtual-office, which was read alongside official media/browser/integration docs.
+- Deliverables: `docs/spatial-platform/README.md`, `01-PRD.md`, `02-UX-WIREFRAMES.md`, `03-ARCHITECTURE.md`. Include requirement traceability, six user journeys, pixel art bible, HUD/mapmaker/share-stage wireframes, interaction state machines, API/events, persistence schema, scaling/security/privacy/failure behavior and five phased release gates.
+- Proposed architecture: React HUD + Phaser renderer adapter, authoritative world state, PostgreSQL/Redis/object storage, mediasoup SFU + TURN, Yjs documents, explicit recorder/scribe consent. This is not installed/implemented; current app remains SVG + WebSocket + small P2P voice mesh. Next recommended build is P1 identity/durable maps/pixel HUD and desk-task-note resume; SFU privacy is a later gated milestone.
+- No runtime changes in this documentation phase. Local document links and fenced-block structure checked. Preserve original pet appearance; true 3D remains optional/unimplemented. Do not conflate the user's full vision with the prototype's completed capabilities or claim 200-person readiness.
+
 ## Latest phase: restored pet appearance and connected Space Studio
 
 - User correction: prefers the original pet look; wanted optional true 3D, not redesigned SVG characters. `Companions.tsx` now uses its previous emoji artwork again in gallery, scene and floating pet. Chat/AI cancellation improvements remain. `PetAvatar.tsx` is unused; do not re-enable it without user direction. True 3D is not implemented.
