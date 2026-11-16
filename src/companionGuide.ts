@@ -16,7 +16,7 @@ export function guide(question: string, history: string[]): GuideReply | null {
     if (/calendar|event/.test(q)) return {text:'Open Calendar. Use Month for dates and Agenda for the event list and delete controls.',destination:'Calendar'}
     return {text:'What would you like to find—a task, a subject unit, a project, a university, or a calendar event?'}
   }
-  if (/help|can you do|how.*work/.test(q)) return {text:'I can add assignments to Home tasks, add named units to existing subjects, and guide you around LifeOS. Try “add a unit for R called functions”, then “where can I find it?”. I use local commands; I don’t yet have a connected AI model for open-ended questions.'}
+  if (/help|can you do|how.*work/.test(q)) return {text:'I can add assignments to Home tasks, add named units to existing subjects, and guide you around LifeOS. Name one of your subjects and ask me to add a unit, then ask “where can I find it?”. I use local commands; I don’t yet have a connected AI model for open-ended questions.'}
   if (/hello|^hi\b|thank/.test(q)) return {text:'I’m here! Tell me what you want to add or where you want to go. I’ll explain what changed and where it lives.'}
   return {text:'I’m not sure how to carry out that request yet, so I haven’t changed anything. I can add assignments, add subject units, and show you where to find them. Could you name the item or workspace you mean?'}
 }

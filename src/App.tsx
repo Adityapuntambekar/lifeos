@@ -69,7 +69,6 @@ export default function App() {
   const [addOpen, setAddOpen] = useState(false)
   const [newTask, setNewTask] = useState('')
   const complete = tasks.filter(t => t.done).length
-  const nextExam = useMemo(() => friendlyCountdown('2026-11-23'), [])
 
   useEffect(() => {
     const listener = (event: KeyboardEvent) => { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); setPalette(true) } }

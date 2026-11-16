@@ -1,5 +1,14 @@
 # LifeOS
 
+## Fresh sharing defaults — 17 November 2026
+
+User requested neutral personal sections while retaining Academics/Skills, and confirmed adding Render verification card with a strict FREE-only requirement. Never add paid resources; stop and alert on further charges. No ongoing billing monitoring is configured.
+
+New-user tasks, university shortlist, journal and calendar start empty. Abroad opens a world view, removes old Chalmers selection/Swedish coordinates and Sweden-vs-Denmark styling. Companions retain original artwork and generic templates, start with no conversation history and do not float onscreen until chosen. Removed unused personal progress/exam constants. Academics and Skills content unchanged.
+
+KTH is absent from source; existing browser data can retain earlier plans. Settings now offers reversible Start fresh, keep Academics & Skills: archives all other lifeos sections locally, preserves shared-space owner key, and reloads at the base URL. Restore/swap recovers the old personal sections and archives the current ones. The archive is deliberately excluded from ordinary export and release packages. No user data was automatically erased. Tests verify preserved learning data/owner key, removed personal entries, archive restoration and protection against overwrite.
+
+
 ## Friend beta audit and packaging — 17 November 2026
 
 User requested all-section bug review and a distributable app for friends in different locations. They asked for help choosing hosting. User explicitly chose FREE hosting. Blueprint now uses Render Free, Singapore, one instance, NO paid disk/database. Server files and ownership reset on sleep/restart/redeploy; LIFEOS_EPHEMERAL=true makes the UI mark these sessions temporary. Host must retain a browser shared-map draft/backup and create a new invitation after reset. No Render account connected, public deployment or TURN service provisioned. Do not create paid resources. Those remain necessary to test with remote friends. Do not claim the portable localhost package connects remote computers automatically.
