@@ -74,3 +74,8 @@ Automated WebSocket tests cover room presence/chat, isolation between rooms, mov
 # Seats and personal rooms
 
 Click a campus chair to walk over and request its seat. Occupancy is enforced by the shared server. Stand, move, leave or disconnect to release it. Personal rooms are solo, saved in this browser, customizable with furniture/themes, and backed up with the rest of LifeOS. They can be opened without joining a server. Entering one from the campus mutes voice and marks you as in your own room. Friends cannot visit personal rooms yet. Existing campus voice and room-hosting requirements below still apply.
+# Space Studio shared maps
+
+After creating or joining a campus, choose **Shared rooms**. The first connected participant is the session host and may edit/publish the map. Others can walk, sit, chat and join voice. Quiet rooms mute microphones; entering another room also mutes. The host role transfers if its holder disconnects. Publishing a map resets occupants to safe entrances and stops voice. Campus chat remains visible across rooms.
+
+Published maps disappear from server memory when the last participant leaves. The host's saved draft remains in this browser; use **Edit map → Load saved shared map → Publish to everyone** in a new session. Personal maps are stored separately and can be copied into a shared draft with **Use my personal rooms**. No account-based ownership or private-room access controls are provided. Run `npm run test:space` to check shared map publishing, seating, collision, voice signalling isolation, host transfer and hosting.
