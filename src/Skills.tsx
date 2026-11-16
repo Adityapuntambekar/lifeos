@@ -1,3 +1,4 @@
+import {readSaved,writeSaved} from './savedStorage'
 import {takeReveal} from './reveal'
 import {newId} from './ids.ts'
 import { useEffect, useState, type CSSProperties } from 'react'
@@ -40,7 +41,7 @@ export const seedTree = (): Tree => ({
 })
 const defaultProblems: Problem[] = []
 export const defaultProjects: Project[] = []
-function read<T>(key: string, fallback: T): T { try { return JSON.parse(localStorage.getItem(key) || '') as T } catch { return fallback } }
+const read=readSaved
 const descendants = (node: Node): Node[] => node.children ? node.children.flatMap(child => [child, ...descendants(child)]) : []
 const progress = (node: Node) => { const leaves = node.children ? descendants(node).filter(item => !item.children?.length) : [node]; return leaves.length ? Math.round(leaves.filter(item => item.done).length / leaves.length * 100) : 0 }
 const allProgress = (nodes: Node[]) => { const leaves = nodes.flatMap(node => [node, ...descendants(node)]).filter(node => !node.children?.length); return leaves.length ? Math.round(leaves.filter(node => node.done).length / leaves.length * 100) : 0 }
@@ -55,15 +56,15 @@ export default function Skills() {
   const [problems, setProblems] = useState<Problem[]>(() => read('lifeos.skills.problems', defaultProblems))
   const [projects, setProjects] = useState<Project[]>(() => read('lifeos.skills.projects', defaultProjects))
   const [stats, setStats] = useState(() => read('lifeos.skills.stats', { username: '', easy: 0, medium: 0, hard: 0, streak: 0, rating: 0 }))
-  useEffect(() => localStorage.setItem('lifeos.skills.tree', JSON.stringify(tree)), [tree])
+  useEffect(() => writeSaved('lifeos.skills.tree', JSON.stringify(tree)), [tree])
   useEffect(() => {
     const refresh=()=>{setTree(read('lifeos.skills.tree',seedTree()));const target=localStorage.getItem('lifeos.skills.activeTab');if(target&&['Programming','AI / ML','Maths & stats','Aptitude'].includes(target))setTab(target as TrackKey)}
     window.addEventListener('lifeos-skills-updated',refresh)
     return ()=>window.removeEventListener('lifeos-skills-updated',refresh)
   },[])
-  useEffect(() => localStorage.setItem('lifeos.skills.problems', JSON.stringify(problems)), [problems])
-  useEffect(() => localStorage.setItem('lifeos.skills.projects', JSON.stringify(projects)), [projects])
-  useEffect(() => localStorage.setItem('lifeos.skills.stats', JSON.stringify(stats)), [stats])
+  useEffect(() => writeSaved('lifeos.skills.problems', JSON.stringify(problems)), [problems])
+  useEffect(() => writeSaved('lifeos.skills.projects', JSON.stringify(projects)), [projects])
+  useEffect(() => writeSaved('lifeos.skills.stats', JSON.stringify(stats)), [stats])
   useEffect(()=>{
     const refresh=()=>setProjects(read('lifeos.skills.projects',defaultProjects))
     window.addEventListener('lifeos-data-updated',refresh)

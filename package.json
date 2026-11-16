@@ -10,7 +10,9 @@
     "dev:lan": "vite --host 0.0.0.0",
     "space:serve": "node --experimental-strip-types server/start.mjs",
     "test:space": "node tests/space-server.mjs && node tests/space-seating.mjs && node tests/studio.mjs && node tests/space-hosting.mjs && node tests/workspace-persistence.mjs",
-    "test:creative": "node tests/creative-upgrade.mjs && node tests/creative-ui.mjs && node tests/studio-ui.mjs && node tests/companion-brain.mjs"
+    "test:creative": "node tests/creative-upgrade.mjs && node tests/creative-ui.mjs && node tests/studio-ui.mjs && node tests/companion-brain.mjs",
+    "test:audit": "node tests/app-audit.mjs && node tests/voice-config.mjs",
+    "package:windows": "npm run build && node scripts/package-windows.mjs"
   },
   "dependencies": {
     "@tiptap/extension-placeholder": "^3.34.0",

@@ -1,5 +1,18 @@
 # LifeOS — continuation handoff
 
+## Friend beta audit and packaging — 17 November 2026
+
+User requested all-section bug review and a distributable app for friends in different locations. They asked for help choosing hosting. User explicitly chose FREE hosting. Blueprint now uses Render Free, Singapore, one instance, NO paid disk/database. Server files and ownership reset on sleep/restart/redeploy; LIFEOS_EPHEMERAL=true makes the UI mark these sessions temporary. Host must retain a browser shared-map draft/backup and create a new invitation after reset. No Render account connected, public deployment or TURN service provisioned. Do not create paid resources. Those remain necessary to test with remote friends. Do not claim the portable localhost package connects remote computers automatically.
+
+Fixed workspace profile control (screenshot) and header date navigation; Abroad country-filter options and misplaced delete control; persistent ECTS entries and zero-grade inclusion in weighted GPA; calendar edit flow/date-time requirements/ICS escaping; removed notification-permission prompt that could not schedule reminders. Added validated guarded saves for Home/Academics/Skills/Abroad/Calendar: corrupt existing data is preserved and save failures appear in a persistent warning instead of crashing effects. Existing pet visuals unchanged.
+
+Shared server now detects stale sockets, rejects foreign browser origins, serves health checks and runtime ICE configuration. Optional Coturn shared-secret credentials expire after ten minutes; master secret remains server-only. Cross-server invitation links are explained rather than joined on the wrong host. Full UI/real network voice still requires testing.
+
+Built `outputs/LifeOS-Windows-Beta-2026-11-17` with bundled Node runtime, compiled frontend, ws, server and third-party licenses; no npm/build step required for recipients. Launcher opens localhost:5173 and persists maps at LOCALAPPDATA/LifeOSBeta/workspaces. Release is portable web app + PWA, not signed Electron/native installer. `scripts/package-windows.mjs` reproduces folder after build; ZIP is separate. `docs/FRIEND_BETA.md` contains setup, deployment and test instructions. Source and runnable developer copy remain under outputs/LifeOS.
+
+Passed: production build; all-section DOM audit with profile save, academic ECTS/GPA, skill delete, university add/delete, calendar edit/delete, corrupt-data preservation; existing space/creative/backup/search-home/journal/editor/PWA suites; new voice-config checks; portable bundled-runtime HTTP/PWA/two-client WebSocket/persistence smoke. Computer Use attempted Chrome but stopped because it could not reliably identify browser URL; no visual QA or actual microphone check claimed. Broader enterprise spec remains future work. Known limits: browser-local personal data, no cloud auth/video/screen-share/recording/background reminders; 12-person maximum, trusted-group beta.
+
+
 ## Continuation review — 17 November 2026
 
 Reviewed the earlier user requirements, spatial specification, current source, local commit and standalone copy before continuing. The local foundation commit had not yet reached GitHub. The current milestone remains persistent local workspaces, pixel interiors and personal desk/task/note resume; the full Gather-inspired specification remains the roadmap.

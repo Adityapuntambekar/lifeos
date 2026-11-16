@@ -1,3 +1,4 @@
+import {readSaved,writeSaved,StorageNotice} from './savedStorage'
 import {newId} from './ids.ts'
 import { useEffect, useMemo, useState } from 'react'
 import {
@@ -30,11 +31,11 @@ const pages: { label: Page; icon: typeof LayoutDashboard }[] = [
 
 function useSavedTasks() {
   const [tasks, setTasks] = useState<Task[]>(() => {
-    try { return JSON.parse(localStorage.getItem('lifeos.tasks') || 'null') || initialTasks } catch { return initialTasks }
+    return readSaved('lifeos.tasks',initialTasks)
   })
-  useEffect(() => localStorage.setItem('lifeos.tasks', JSON.stringify(tasks)), [tasks])
+  useEffect(() => writeSaved('lifeos.tasks', JSON.stringify(tasks)), [tasks])
   useEffect(() => {
-    const refresh = () => { try { setTasks(JSON.parse(localStorage.getItem('lifeos.tasks') || '[]')) } catch { /* keep current in-memory tasks */ } }
+    const refresh = () => { try { setTasks(readSaved('lifeos.tasks',initialTasks)) } catch { /* keep current in-memory tasks */ } }
     window.addEventListener('lifeos-tasks-updated', refresh)
     return () => window.removeEventListener('lifeos-tasks-updated', refresh)
   }, [])
@@ -64,7 +65,7 @@ export default function App() {
     const observer=new MutationObserver(()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(find)});observer.observe(document.querySelector('main')||document.body,{subtree:true,childList:true});frame=requestAnimationFrame(find);const timer=setTimeout(()=>observer.disconnect(),3000);return()=>{observer.disconnect();cancelAnimationFrame(frame);clearTimeout(timer);clearTimeout(removeTimer);target?.classList.remove('search-spotlight')}
   },[searchTarget])
   const [theme, setTheme] = useState(()=>{try{const saved=JSON.parse(localStorage.getItem('lifeos.theme')||'"nordic"');return ['nordic','lavender','matcha','sakura','midnight'].includes(saved)?saved:'nordic'}catch{return 'nordic'}})
-  useEffect(()=>localStorage.setItem('lifeos.theme',JSON.stringify(theme)),[theme])
+  useEffect(()=>writeSaved('lifeos.theme',JSON.stringify(theme)),[theme])
   const [addOpen, setAddOpen] = useState(false)
   const [newTask, setNewTask] = useState('')
   const complete = tasks.filter(t => t.done).length
@@ -82,11 +83,11 @@ export default function App() {
       <div className="brand"><div className="brand-mark"><Sparkles size={18}/></div>{sidebar && <span>LifeOS</span>}<button className="icon-btn collapse" onClick={() => setSidebar(!sidebar)} aria-label="Collapse sidebar"><ChevronLeft size={17}/></button></div>
       <nav>{pages.map(({ label, icon: Icon }) => <button key={label} aria-label={label} title={label} className={`nav-item ${page === label ? 'active' : ''}`} onClick={() => setPage(label)}><Icon size={18}/>{sidebar && <span>{label}</span>}{label === 'Companions' && sidebar && <span className="dot"/>}</button>)}</nav>
       {sidebar && <><p className="nav-heading">WORKSPACES</p><button className="tree-item" onClick={()=>setPage('Academics')}><BookOpen size={16}/> Learning tracker <MoreHorizontal size={15}/></button><button className="tree-item" onClick={()=>setPage('Journal')}><FileText size={16}/> My notes</button><button className="tree-item" onClick={()=>setPage('Abroad')}><Target size={16}/> World explorer</button></>}
-      <div className="sidebar-bottom"><button className="nav-item" onClick={()=>setSettingsOpen(true)}><Settings size={18}/>{sidebar && <span>Settings</span>}</button><div className="profile"><div className="avatar">{profile.name.split(/\s+/).map(n=>n[0]).join('').slice(0,2).toUpperCase()||'✦'}</div>{sidebar && <div><b>{profile.name||'Your space'}</b><small>{profile.workspace}</small></div>}<ChevronDown size={15}/></div></div>
+      <div className="sidebar-bottom"><button className="nav-item" onClick={()=>setSettingsOpen(true)}><Settings size={18}/>{sidebar && <span>Settings</span>}</button><button className="profile" aria-label="Open workspace settings" aria-haspopup="dialog" onClick={()=>setSettingsOpen(true)}><div className="avatar">{profile.name.split(/\s+/).map(n=>n[0]).join('').slice(0,2).toUpperCase()||'✦'}</div>{sidebar && <div><b>{profile.name||'Your space'}</b><small>{profile.workspace}</small></div>}<ChevronDown size={15}/></button></div>
     </aside>
 
-    <main>
-      <header><div className="mobile-brand"><button className="icon-btn" onClick={() => setSidebar(!sidebar)}><Menu size={20}/></button><span>LifeOS</span></div><div className="crumb"><span>{profile.workspace}</span><ChevronRight size={15}/><b>{page}</b></div><div className="header-actions"><button className="today-chip"><Clock3 size={15}/>{dateText.format(new Date())}</button><button className="search-btn" onClick={() => setPalette(true)}><Search size={17}/><span>Search your workspace</span><kbd>Ctrl K</kbd></button><button className="icon-btn" aria-label="Open calendar" onClick={()=>setPage('Calendar')}><CalendarDays size={18}/></button></div></header>
+    <main><StorageNotice/>
+      <header><div className="mobile-brand"><button className="icon-btn" onClick={() => setSidebar(!sidebar)}><Menu size={20}/></button><span>LifeOS</span></div><div className="crumb"><span>{profile.workspace}</span><ChevronRight size={15}/><b>{page}</b></div><div className="header-actions"><button className="today-chip" onClick={()=>setPage('Calendar')} title="Open calendar"><Clock3 size={15}/>{dateText.format(new Date())}</button><button className="search-btn" onClick={() => setPalette(true)}><Search size={17}/><span>Search your workspace</span><kbd>Ctrl K</kbd></button><button className="icon-btn" aria-label="Open calendar" onClick={()=>setPage('Calendar')}><CalendarDays size={18}/></button></div></header>
       {page === 'Home' ? <HomeDashboard tasks={tasks} toggle={toggleTask} remove={id=>setTasks(items=>items.filter(t=>t.id!==id))} add={()=>setAddOpen(true)} go={setPage} open={openSaved}/> : page === 'Academics' ? <Academics /> : page === 'Skills' ? <Skills /> : page === 'Abroad' ? <Abroad /> : page === 'Journal' ? null : page === 'Space' ? null : page === 'Calendar' ? <Calendar /> : page === 'Companions' ? null : <ComingSoon page={page} />}
       <div hidden={page!=='Journal'}><Journal/></div>
       <Space onOpen={openSaved} onJournal={()=>setPage('Journal')} active={page === 'Space'} onReturn={()=>setPage('Space')}/>

@@ -34,6 +34,7 @@ const rules:Record<string,Rule>={
  'lifeos.skills.activeTab':v=>['Programming','AI / ML','Maths & stats','Aptitude','Projects'].includes(v),
  'lifeos.theme':v=>['nordic','lavender','matcha','sakura','midnight'].includes(v)
 }
+export const validStoredValue=(key:string,value:unknown)=>rules[key]?.(value)??true
 export function parseBackup(text:string){
  if(text.length>5_000_000)throw new Error('Choose a backup smaller than 5 MB.')
  const parsed=JSON.parse(text);if(!obj(parsed))throw new Error('A backup must contain an object of saved sections.')

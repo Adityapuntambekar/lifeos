@@ -8,14 +8,15 @@ export {zoneAt} from '../shared/spaceWorld.ts'
 
 type Person={id:string;name:string;color:string;x:number;y:number;zone:string;voice:boolean;status:string;goal:string;reaction:string;reactionUntil:number;seat:string;personal:boolean;interior:string}
 type Room={owners:Set<WebSocket>;peers:Map<WebSocket,Person>;messages:{name:string;text:string;zone:string;id:string}[];board:string;timers:Record<string,number>;studio:StudioWorld;revision:number;host:string;ownerHash:string;name:string}
-export function attachSpace(server:Server,options:{directory?:string}={}){
+export function attachSpace(server:Server,options:{directory?:string;durable?:boolean}={}){
  const store=options.directory?new WorkspaceStore(options.directory):null
  const wss=new WebSocketServer({noServer:true,maxPayload:262144});const rooms=new Map<string,Room>()
- const upgrade=(req:any,socket:any,head:any)=>{if(req.url?.split('?')[0]==='/space')wss.handleUpgrade(req,socket,head,ws=>wss.emit('connection',ws,req))}
+ const upgrade=(req:any,socket:any,head:any)=>{if(req.headers.origin){try{if(new URL(req.headers.origin).host!==req.headers.host){socket.destroy();return}}catch{socket.destroy();return}}if(req.url?.split('?')[0]==='/space')wss.handleUpgrade(req,socket,head,ws=>wss.emit('connection',ws,req))}
  server.on('upgrade',upgrade)
  const send=(ws:WebSocket,data:unknown)=>{if(ws.readyState===WebSocket.OPEN)ws.send(JSON.stringify(data))}
- const state=(room:Room,includeStudio=false)=>{const data={type:'state',people:[...room.peers.values()],board:room.board,timers:room.timers,...(includeStudio?{studio:room.studio}:{}),studioRevision:room.revision,host:room.host,workspaceName:room.name,persistent:!!store};for(const ws of room.peers.keys())send(ws,data)}
- wss.on('connection',ws=>{
+ const state=(room:Room,includeStudio=false)=>{const data={type:'state',people:[...room.peers.values()],board:room.board,timers:room.timers,...(includeStudio?{studio:room.studio}:{}),studioRevision:room.revision,host:room.host,workspaceName:room.name,persistent:!!store&&options.durable!==false};for(const ws of room.peers.keys())send(ws,data)}
+ const alive=new WeakSet<WebSocket>();const heartbeat=setInterval(()=>{for(const ws of wss.clients){if(!alive.has(ws)){ws.terminate();continue}alive.delete(ws);ws.ping()}},30000);heartbeat.unref()
+ wss.on('connection',ws=>{alive.add(ws);ws.on('pong',()=>alive.add(ws))
   let room:Room|undefined,key='',person:Person|undefined;let count=0,windowStart=Date.now()
   ws.on('message',raw=>{let operation='',requestId='';try{
    if(Date.now()-windowStart>1000){count=0;windowStart=Date.now()}if(++count>40)return
@@ -54,5 +55,5 @@ export function attachSpace(server:Server,options:{directory?:string}={}){
   ws.on('close',()=>{if(room){room.peers.delete(ws);room.owners.delete(ws);if(room.host===person?.id)room.host=store?([...room.owners].map(client=>room!.peers.get(client)?.id).find(Boolean)||''):room.peers.values().next().value?.id||'';if(!room.peers.size)rooms.delete(key);else state(room)}})
   ws.on('error',()=>{})
  })
- return ()=>{server.off('upgrade',upgrade);for(const client of wss.clients)client.terminate();wss.close()}
+ return ()=>{clearInterval(heartbeat);server.off('upgrade',upgrade);for(const client of wss.clients)client.terminate();wss.close()}
 }

@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: lifeos-beta
+    runtime: node
+    plan: free
+    region: singapore
+    numInstances: 1
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm run space:serve
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: 24.22.0
+      - key: LIFEOS_DATA_DIR
+        value: data/workspaces
+      - key: LIFEOS_EPHEMERAL
+        value: "true"
