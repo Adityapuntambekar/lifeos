@@ -1,3 +1,4 @@
+import {validRoom} from './personalRoomModel.ts'
 import {validHome} from './homeLayout.ts'
 import {validJournal} from './journalModel.ts'
 type Rule=(value:any)=>boolean
@@ -8,6 +9,7 @@ const list=(rule:Rule):Rule=>v=>Array.isArray(v)&&v.length<=10000&&v.every(rule)
 const records=(fields:Record<string,Rule>)=>list(shape({id:str,...fields}))
 const node:Rule=v=>shape({id:str,title:str})(v)&&(v.done===undefined||bool(v.done))&&(v.children===undefined||list(node)(v.children))
 const rules:Record<string,Rule>={
+ 'lifeos.space.personal':validRoom,
  'lifeos.home.layout':validHome,
  'lifeos.journal':validJournal,'lifeos.profile':shape({name:str,workspace:str}),'lifeos.intention':str,
  'lifeos.tasks':records({title:str,category:str,done:bool}),

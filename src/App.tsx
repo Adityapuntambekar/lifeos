@@ -89,7 +89,7 @@ export default function App() {
       <header><div className="mobile-brand"><button className="icon-btn" onClick={() => setSidebar(!sidebar)}><Menu size={20}/></button><span>LifeOS</span></div><div className="crumb"><span>{profile.workspace}</span><ChevronRight size={15}/><b>{page}</b></div><div className="header-actions"><button className="today-chip"><Clock3 size={15}/>{dateText.format(new Date())}</button><button className="search-btn" onClick={() => setPalette(true)}><Search size={17}/><span>Search your workspace</span><kbd>Ctrl K</kbd></button><button className="icon-btn" aria-label="Open calendar" onClick={()=>setPage('Calendar')}><CalendarDays size={18}/></button></div></header>
       {page === 'Home' ? <HomeDashboard tasks={tasks} toggle={toggleTask} remove={id=>setTasks(items=>items.filter(t=>t.id!==id))} add={()=>setAddOpen(true)} go={setPage} open={openSaved}/> : page === 'Academics' ? <Academics /> : page === 'Skills' ? <Skills /> : page === 'Abroad' ? <Abroad /> : page === 'Journal' ? null : page === 'Space' ? null : page === 'Calendar' ? <Calendar /> : page === 'Companions' ? null : <ComingSoon page={page} />}
       <div hidden={page!=='Journal'}><Journal/></div>
-      <Space active={page === 'Space'} onReturn={()=>setPage('Space')}/>
+      <Space onJournal={()=>setPage('Journal')} active={page === 'Space'} onReturn={()=>setPage('Space')}/>
       <Companions navigate={setPage} pageActive={page === 'Companions'} currentPage={page}/>
     </main>
     {settingsOpen&&<AppSettings close={()=>setSettingsOpen(false)}/>}

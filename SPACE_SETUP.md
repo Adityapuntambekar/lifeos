@@ -71,3 +71,6 @@ node tests/space-hosting.mjs
 ```
 
 Automated WebSocket tests cover room presence/chat, isolation between rooms, movement/zone muting, timers, board, signalling restrictions and disconnects. Both the Vite development and standalone production HTTP/WebSocket servers passed startup/join smoke checks. The production build passes. Real microphone interoperability, browser visual checks and internet TURN deployment still need testing on the target devices.
+# Seats and personal rooms
+
+Click a campus chair to walk over and request its seat. Occupancy is enforced by the shared server. Stand, move, leave or disconnect to release it. Personal rooms are solo, saved in this browser, customizable with furniture/themes, and backed up with the rest of LifeOS. They can be opened without joining a server. Entering one from the campus mutes voice and marks you as in your own room. Friends cannot visit personal rooms yet. Existing campus voice and room-hosting requirements below still apply.

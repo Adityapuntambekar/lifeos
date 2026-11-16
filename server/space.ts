@@ -1,10 +1,10 @@
 import {WebSocketServer,WebSocket} from 'ws'
 import type {Server} from 'node:http'
 import {randomUUID} from 'node:crypto'
-import {canStep,canHear,zoneAt} from '../shared/spaceWorld.ts'
+import {canStep,canHear,zoneAt,seats} from '../shared/spaceWorld.ts'
 export {zoneAt} from '../shared/spaceWorld.ts'
 
-type Person={id:string;name:string;color:string;x:number;y:number;zone:string;voice:boolean;status:string;goal:string;reaction:string;reactionUntil:number}
+type Person={id:string;name:string;color:string;x:number;y:number;zone:string;voice:boolean;status:string;goal:string;reaction:string;reactionUntil:number;seat:string;personal:boolean}
 type Room={peers:Map<WebSocket,Person>;messages:{name:string;text:string;zone:string;id:string}[];board:string;timers:Record<string,number>}
 export function attachSpace(server:Server){
  const wss=new WebSocketServer({noServer:true,maxPayload:65536});const rooms=new Map<string,Room>()
@@ -20,11 +20,14 @@ export function attachSpace(server:Server){
    if(m.type==='join'&&!room){if(typeof m.room!=='string'||!/^[a-zA-Z0-9-]{8,80}$/.test(m.room)||typeof m.name!=='string'||!m.name.trim())return send(ws,{type:'error',text:'Enter your name and a valid invite code.'})
     key=m.room;room=rooms.get(key);if(!room){room={peers:new Map(),messages:[],board:'Welcome! What are we working on today?',timers:{}};rooms.set(key,room)}
     if(room.peers.size>=12){room=undefined;return send(ws,{type:'error',text:'This space is full (12 people).'})}
-    person={id:randomUUID(),name:m.name.trim().slice(0,28),color:/^#[0-9a-f]{6}$/i.test(m.color)?m.color:'#8569c4',x:24,y:74,zone:'lounge',voice:false,status:'Available',goal:'',reaction:'',reactionUntil:0};room.peers.set(ws,person);send(ws,{type:'welcome',id:person.id,messages:room.messages});state(room);return
+    person={id:randomUUID(),name:m.name.trim().slice(0,28),color:/^#[0-9a-f]{6}$/i.test(m.color)?m.color:'#8569c4',x:24,y:74,zone:'lounge',voice:false,status:'Available',goal:'',reaction:'',reactionUntil:0,seat:'',personal:false};room.peers.set(ws,person);send(ws,{type:'welcome',id:person.id,messages:room.messages});state(room);return
    }
    if(!room||!person)return
-   if(m.type==='move'&&Number.isFinite(m.x)&&Number.isFinite(m.y)&&canStep(person,{x:m.x,y:m.y})){person.x=m.x;person.y=m.y;const next=zoneAt(person.x,person.y);if(next!==person.zone)person.voice=false;person.zone=next;state(room)}
-   if(m.type==='voice'){person.voice=m.enabled===true&&person.zone!=='quiet';state(room)}
+   if(m.type==='move'&&!person.personal&&Number.isFinite(m.x)&&Number.isFinite(m.y)&&canStep(person,{x:m.x,y:m.y})){person.seat='';person.x=m.x;person.y=m.y;const next=zoneAt(person.x,person.y);if(next!==person.zone)person.voice=false;person.zone=next;state(room)}
+   if(m.type==='personal'){person.personal=m.enabled===true;person.voice=false;person.seat='';state(room)}
+   if(m.type==='sit'&&!person.personal){const seat=seats.find(s=>s.id===m.seat);if(!seat)return send(ws,{type:'error',text:'That seat does not exist.'});if([...room.peers.values()].some(p=>p.id!==person!.id&&p.seat===seat.id))return send(ws,{type:'error',text:'Someone is already sitting here. Choose another seat.'});if(Math.hypot(person.x-seat.x,person.y-seat.y)>3)return send(ws,{type:'error',text:'Walk closer to the chair first.'});person.x=seat.x;person.y=seat.y;person.seat=seat.id;person.zone=zoneAt(seat.x,seat.y);state(room)}
+   if(m.type==='stand'){person.seat='';state(room)}
+   if(m.type==='voice'){person.voice=m.enabled===true&&!person.personal&&person.zone!=='quiet';state(room)}
    if(m.type==='goal'&&typeof m.text==='string'){person.goal=m.text.trim().slice(0,120);state(room)}
    if(m.type==='reaction'&&['👋','☕','💡','🎉','❤️'].includes(m.value)){person.reaction=m.value;person.reactionUntil=Date.now()+5000;state(room)}
    if(m.type==='status'&&['Available','Focusing','On a break'].includes(m.value)){person.status=m.value;state(room)}

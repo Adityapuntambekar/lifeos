@@ -1,5 +1,5 @@
 import {canHear} from '../shared/spaceWorld.ts'
-export type SpacePerson={id:string;name:string;color:string;x:number;y:number;zone:string;voice:boolean;status:string;goal:string;reaction:string;reactionUntil:number}
+export type SpacePerson={id:string;name:string;color:string;x:number;y:number;zone:string;voice:boolean;status:string;goal:string;reaction:string;reactionUntil:number;seat:string;personal:boolean}
 export class SpaceVoice {
  stream:MediaStream|null=null
  private peers=new Map<string,{pc:RTCPeerConnection;audio:HTMLAudioElement;ice:RTCIceCandidateInit[]}>()

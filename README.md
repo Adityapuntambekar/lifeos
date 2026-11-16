@@ -1,5 +1,15 @@
 # LifeOS
 
+## Spaces, a knowledge atlas and living companions
+
+**Space:** click a campus chair to walk over and sit. Seats are shared and exclusive; moving, standing, leaving or disconnecting releases them. **My room** opens a personal solo space; **Enter my solo room** also works without connecting to a shared server. Decorate it with furniture, change its atmosphere/name, or start from Library, Office or Studio templates. Choose a furniture tool and click tiles to place/replace it; Erase removes it. Click a chair/sofa to sit, or empty floor to move. Room layouts save on this device and are included in backups. Personal rooms are not shared with friends or synchronized between devices. Campus voice is muted while you are inside; the shared campus still requires the server. Open Journal from your room and return without losing your place.
+
+**Journal → Think & connect → Graph:** the Knowledge atlas maps actual `[[wiki links]]`, with aliases and backlinks respected and code examples ignored. Explore the whole notebook or one to three hops around the current note, filter by title/tag, show/hide unlinked notes, drag nodes/background, zoom and reset. Select a node for a preview, double-click to open it, or use the keyboard-accessible note list. Node size reflects connections; unresolved links are listed in the preview. Up to 200 matching notes render at once; filter larger notebooks. Graph arrangement is temporary. Obsidian plugins, vault synchronization, canvas embeds and block references are not included.
+
+**Companions:** five original animated vector characters replace emoji-only pets, with breathing, blinking and thinking poses (reduced motion supported). Chat retains more visible conversation, offers basic local greetings/focus guidance, and explains rooms and graphs. Local Ollama conversation uses the pet name, role, recent chat and supported workspace context, excluding private journal content. Stop cancels a pending reply; switching pet, page or AI settings cancels stale requests. AI-proposed changes still require Apply, and only the validated action executor can save them. Natural chat requires an installed, running model configured under **AI settings**; it is not a built-in hosted chatbot. Spoken replies use an available local device voice when enabled.
+
+Validation: `npm run build`, `npm run test:creative`, `npm run test:space`, plus existing search/Home, backup, journal, editor, companion and PWA checks. Automated DOM and WebSocket tests pass. Real-browser visual checks remain blocked by preview connection timeouts; live microphone calls and a real Ollama conversation have not been verified in this phase.
+
 ## Your Home, your workspace
 
 Open **Home → Customize** to choose Balanced, Focus or Writer, reorder cards, show/hide them, choose half/full width, and adjust spacing and atmosphere. Cards include your intention, shortcuts, tasks, recent notes, upcoming events and active projects. Hiding a card keeps its content. Your layout is saved locally and included in Calendar backups.

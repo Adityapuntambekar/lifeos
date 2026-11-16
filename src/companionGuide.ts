@@ -3,9 +3,9 @@ export type GuideReply = { text: string; destination?: Destination }
 export function guide(question: string, history: string[]): GuideReply | null {
   const q = question.toLowerCase()
   if (/\b(add|create|make)\b/.test(q)) return null
-  if (/where|find it|show me|take me|open|go to/.test(q)) {
-    if (/journal|notes|writing|diary/.test(q)) return {text:'Open Journal. Journal & create has rich text and daily pages; Think & connect has Markdown, [[note links]], backlinks and a graph. Notes save on this device. Journal contents are not sent to the companion AI.',destination:'Journal'}
-    if (/space|garden|friends|meeting/.test(q)) return {text:'Open Space to join the Study Garden. Friends need the same server and invite code. Use the quiet library for solo study, or opt into voice in a group zone.',destination:'Space'}
+  if (/where|find it|show me|take me|open|go to|how/.test(q)) {
+    if (/journal|notes|writing|diary|graph|markdown|backlinks/.test(q)) return {text:'Open Journal. Journal & create has rich text and daily pages; Think & connect has Markdown, [[note links]], backlinks and a Knowledge atlas with whole-notebook and local graphs, tags, zoom and draggable nodes. Notes save on this device. Journal contents are not sent to the companion AI.',destination:'Journal'}
+    if (/space|garden|friends|meeting|\bsit\b|chair|room|library|office/.test(q)) return {text:'Open Space to join the Study Garden. Friends need the same server and invite code. Click a chair to walk over and sit. My room opens your solo room with furniture, themes and library/office/studio templates. Use the quiet library for solo study, or opt into voice in a group zone.',destination:'Space'}
     if (/ai\s*\/\s*ml|programming|aptitude|maths/.test(q)) return {text:'Open Skills and choose the matching track at the top. Newly added learning topics appear at the bottom of its tree.',destination:'Skills'}
     const last = [...history].reverse().find(line => line.includes('Done! I added'))
     const context = /\bit\b|where|show me/.test(q) && !/academics|skills|abroad|calendar|home/.test(q) ? last || '' : ''

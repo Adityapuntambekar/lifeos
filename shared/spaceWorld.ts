@@ -31,4 +31,6 @@ export function route(from:Point,target:Point):Point[]{
  }
  const result:Point[]=[];let current:Point|null=best;while(current&&key(current)!==key(start)){result.unshift(current);current=parents.get(key(current))||null}return result
 }
-export const canHear=(a:Point&{zone:string},b:Point&{zone:string})=>a.zone===b.zone&&a.zone!=='quiet'&&(a.zone!=='lounge'||Math.hypot(a.x-b.x,a.y-b.y)<=18)
+export const canHear=(a:Point&{zone:string;personal?:boolean},b:Point&{zone:string;personal?:boolean})=>!a.personal&&!b.personal&&a.zone===b.zone&&a.zone!=='quiet'&&(a.zone!=='lounge'||Math.hypot(a.x-b.x,a.y-b.y)<=18)
+
+export const seats = [{id:'library-left',x:16,y:32,label:'Library desk 1'},{id:'library-right',x:36,y:32,label:'Library desk 2'},{id:'studio-left',x:68,y:34,label:'Studio desk 1'},{id:'studio-right',x:82,y:34,label:'Studio desk 2'},{id:'office-left',x:70,y:84,label:'Office seat 1'},{id:'office-right',x:82,y:84,label:'Office seat 2'}]
